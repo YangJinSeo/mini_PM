@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.EmployeeMapper">
+	<sql id="baseCol">
+		DEPARTMENT_ID,
+		JOB_ID,
+		EMP_FORM,
+		POSITION,
+		EMP_NUM,
+		EMP_NAME,
+		EMP_ID,
+		EMP_PW,
+		EMP_ADDR,
+		EMP_ADDR_DETAIL,
+		EMP_POST,
+		EMP_PHONE,
+		EMP_JUMIN,
+		EMP_EMAIL,
+		EMP_HIRE_DATE,
+		URGENT_PHONE
+	</sql>
+	
+	<sql id="joinCol">
+		EMP_FORM,
+		POSITION,
+		EMP_NUM,
+		EMP_NAME,
+		EMP_ID,
+		EMP_PW,
+		EMP_ADDR,
+		EMP_ADDR_DETAIL,
+		EMP_POST,
+		EMP_PHONE,
+		EMP_JUMIN,
+		EMP_EMAIL,
+		EMP_HIRE_DATE,
+		URGENT_PHONE
+	</sql>
+	
+
+	<insert id="empInsert" parameterType="empDTO">
+		insert into employees( <include refid="baseCol"/> )
+		values(#{departmentId}, #{jobId}, #{empForm}, #{position}
+				, #{empNum}, #{empName}, null, null
+				, #{empAddr}, #{empAddrDetail}, #{empPost}, #{empPhone}
+				, #{empJumin}, #{empEmail}, #{empHireDate}, #{urgentPhone})
+	</insert>
+	
+	<select id="selectList" resultType="empDTO">
+		select <include refid="baseCol"/> from employees
+	</select>
+
+</mapper>

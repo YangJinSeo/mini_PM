@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.AutoMapper">
+
+<select id="autoNum" resultType="string">
+	select concat(#{tag}, nvl(max(substr(${column_name}, #{tag_len})), 100000) +1) from ${table_name}
+
+</select>
+
+
+</mapper>
