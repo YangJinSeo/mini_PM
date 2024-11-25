@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+	"-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.DepartmentMapper">
+<insert id="dpInsert" parameterType="department">
+	insert into department(department_id, department_name, duty, manager_id, office_loc)
+	values(#{departmentId}, #{departmentName}, #{duty}, #{managerId}, #{officeLoc})
+</insert>
+<select id="dpSelectList" resultType="department" parameterType="startEndPage">
+	select * from(select row_number() over(order by department_id) as rn
+	, department_id, department_name, duty, manager_id, office_loc
+	from department
+	<where>
+		<if test="searchWord != null">
+			department_id like '%' || #{searchWord} || '%'
+			or department_name like '%' || #{searchWord} || '%'
+			or duty like '%' || #{searchWord} || '%'
+			or manager_id like '%' || #{searchWord} || '%'
+			or office_loc like '%' || #{searchWord} || '%'
+		</if>
+	</where>
+) 
+where rn between #{startRow} and #{endRow}
+</select>
+<select id="dpCount" resultType="integer">
+	select count(*) from department
+	<where>
+		<if test="searchWord != null">
+			department_id like '%' || #{searchWord} || '%'
+			or department_name like '%' || #{searchWord} || '%'
+			or duty like '%' || #{searchWord} || '%'
+			or manager_id like '%' || #{searchWord} || '%'
+			or office_loc like '%' || #{searchWord} || '%'
+		</if>
+	</where>
+</select>
+</mapper>
