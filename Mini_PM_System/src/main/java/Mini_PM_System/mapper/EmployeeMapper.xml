@@ -39,6 +39,33 @@
 		URGENT_PHONE
 	</sql>
 	
+	
+	<resultMap id="empResultMap" type="empDTO">
+		<id property="empNum" column="EMP_NUM" />
+	    <result property="departmentId" column="DEPARTMENT_ID" />
+	    <result property="jobId" column="JOB_ID" />
+	    <result property="empForm" column="EMP_FORM" />
+	    <result property="position" column="POSITION" />
+	    <result property="empName" column="EMP_NAME" />
+	    <result property="empId" column="EMP_ID" />
+	    <result property="empPw" column="EMP_PW" />
+	    <result property="empAddr" column="EMP_ADDR" />
+	    <result property="empAddrDetail" column="EMP_ADDR_DETAIL" />
+	    <result property="empPost" column="EMP_POST" />
+	    <result property="empPhone" column="EMP_PHONE" />
+	    <result property="empJumin" column="EMP_JUMIN" />
+	    <result property="empEmail" column="EMP_EMAIL" />
+	    <result property="empHireDate" column="EMP_HIRE_DATE" />
+	    <result property="urgentPhone" column="URGENT_PHONE" />
+	</resultMap>
+
+	
+	<resultMap id="detailResultMap" type="empDtailDTO">
+		<result column="department_name" jdbcType="VARCHAR" javaType="string" property="departmentName"/>
+		<result column="job_name" jdbcType="VARCHAR" javaType="string" property="jobName"/>
+		<association property="employeeDTO" javaType="empDTO" resultMap="empResultMap"/>
+	</resultMap>
+	
 
 	<insert id="empInsert" parameterType="empDTO">
 		insert into employees( <include refid="baseCol"/> )
@@ -48,8 +75,61 @@
 				, #{empJumin}, #{empEmail}, #{empHireDate}, #{urgentPhone})
 	</insert>
 	
-	<select id="selectList" resultType="empDTO">
-		select <include refid="baseCol"/> from employees
+	<select id="selectList" resultType="empDTO" parameterType="startEndPage">
+		
+	select * from(select row_number() over(order by department_id) as rn,
+			<include refid="baseCol"/> from employees
+			<where>
+				<if test="searchWord != null">
+					emp_num like '%' || #{searchWord} || '%'
+					or department_id like '%' || #{searchWord} || '%'
+					or job_id like '%' || #{searchWord} || '%'
+				</if>
+			</where>
+					) 
+	where rn between #{startRow} and #{endRow}
 	</select>
+	
+	<select id="empCount" resultType="integer">
+		select count(*) from employees
+		<where>
+				<if test="searchWord != null">
+					emp_num like '%' || #{searchWord} || '%'
+					or department_id like '%' || #{searchWord} || '%'
+					or job_id like '%' || #{searchWord} || '%'
+				</if>
+		</where>
+	</select>
+	
+	
+	<select id="selectOne" resultMap="detailResultMap">
+		select e.DEPARTMENT_ID, e.job_id
+				, <include refid="joinCol"/>
+				, d.DEPARTMENT_NAME
+				, j.JOB_NAME
+		from employees e join DEPARTMENT d
+		on e.DEPARTMENT_ID = d.DEPARTMENT_ID
+		join jobs j
+		on e.JOB_ID = j.JOB_ID
+		where emp_num = #{empNum}
+	</select>
+	
+	<update id="empUpdate">
+		update employees
+		set DEPARTMENT_ID = #{departmentId},
+			JOB_ID = #{jobId},
+			EMP_FORM = #{empForm},
+			POSITION = #{position},
+			EMP_NAME = #{empName},
+			EMP_ADDR = #{empAddr},
+			EMP_ADDR_DETAIL = #{empAddrDetail},
+			EMP_POST = #{empPost},
+			EMP_PHONE = #{empPhone},
+			EMP_JUMIN = #{empJumin},
+			EMP_EMAIL = #{empEmail},
+			EMP_HIRE_DATE = #{empHireDate},
+			URGENT_PHONE = #{urgentPhone}
+		where EMP_NUM = #{empNum}
+	</update>
 
 </mapper>

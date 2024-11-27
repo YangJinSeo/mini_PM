@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>empList</title>
+<title>empUpdate</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -63,7 +63,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <div class="w3-quarter">
       <div class="w3-container w3-red w3-padding-16">
         <div class="w3-left"><i class="fa fa-list-ul w3-xxxlarge"></i></div>
-        <div class="w3-right"></div>
+        <div class="w3-right">
+        <h3></h3>
+        </div>
         <div class="w3-clear"></div>
         <h4>직원목록</h4>
       </div>
@@ -75,7 +77,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       <div class="w3-container w3-blue w3-padding-16">
         <div class="w3-left"><i class="fa fa-pencil-square-o w3-xxxlarge"></i></div>
         <div class="w3-right">
-          
+          <h3></h3>
         </div>
         <div class="w3-clear"></div>
         <h4>직원등록</h4>
@@ -98,53 +100,95 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <hr>
 
   <div class="w3-container">
-    <h5>직원목록</h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-    <form action="dpList" method="get">
-		<tr>
-			<td colspan=5>직원검색 : 
-				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
-				<input type="submit" value="검색" />
-			</td>
-		</tr>
-	</form>
-      
-      <tr>
-        <td>직원번호</td>
-        <td>이름</td>
-        <td>부서코드</td>
-        <td>직무코드</td>
-        <td>입사일</td>
-      </tr>
-      
-      <tr th:each="empCommand, idx : ${list}">
-        <td><a th:href="|empDetail/${empCommand.empNum}|">[[${empCommand.empNum}]]</a></td>
-        <td><a th:href="|empDetail/${empCommand.empNum}|">[[${empCommand.empName}]]</a></td>
-        <td>[[${empCommand.departmentId}]]</td>
-        <td>[[${empCommand.jobId}]]</td>
-        <td>[[${#dates.format(empCommand.empHireDate, 'yyyy-MM-dd')}]]</td>
-      </tr>
-      
-     <tr>
-		<th colspan="5" style="text-align: center;">
-			<span th:if="${page <= 1}">[이전]</span>
-			<span th:if="${page > 1}">
-			<a th:href="|empList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
-			</span>
-			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|empList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
-			</th:block>
-			<span th:if="${page < maxPage}">
-			<a th:href="@{empList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
-			</span>
-			<span th:if="${page >= maxPage}">
-			[다음]
-			</span>			
-		</th>
-	 </tr>
-     
-    </table><br>
-  </div>
+    <h5>직원등록</h5>
+  	
+    <form action="empUpdate" method="post">
+    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" style="width: 80%;">
+        <tr>
+            <td>사원번호</td>
+            <td><input type="text" name="empNum" style="width:100%;" readonly="readonly" th:value="${empCommand.empNum}"></td>
+        </tr>
+        <tr>
+            <td>사원이름</td>
+            <td><input type="text" name="empName" style="width:100%;" th:value="${empCommand.empName}"></td>
+        </tr>
+        <tr>
+            <td>부서코드</td>
+            <td>
+            	<select name="departmentId" style="width:50%;">
+            		<option th:value="${empCommand.departmentId}">
+            			[[${empCommand.departmentId}]]
+            		</option>
+            		<option disabled="disabled">------------</option>
+		        	<option th:each="dp : ${dp}" th:value="${dp.colName1}">
+		        		[[${dp.colName2}]] [[${dp.colName1}]]
+		        	</option>
+		        </select>
+            </td>
+        </tr>
+        <tr>
+            <td>직무코드</td>
+            <td>
+            	<select name="jobId" style="width:50%;">
+            		<option th:value="${empCommand.jobId}">
+            			[[${empCommand.jobId}]]
+            		</option>
+            		<option disabled="disabled">
+            			--------------------
+            		</option>
+		        	<option th:each="job : ${job}" th:value="${job.colName1}">
+		        		[[${job.colName1}]] : [[${job.colName2}]] 
+		        	</option>
+		        </select>
+            </td>
+        </tr>
+        <tr>
+            <td>직위</td>
+            <td><input type="text" name="position" style="width:100%;" th:value="${empCommand.position}"></td>
+        </tr>
+        <tr>
+            <td>고용형태</td>
+            <td><input type="text" name="empForm" style="width:100%;" th:value="${empCommand.empForm}"></td>
+        </tr>
+        <tr>
+            <td>주민등록번호</td>
+            <td><input type="text" name="empJumin" style="width:100%;" th:value="${empCommand.empJumin}"></td>
+        </tr>
+        <tr>
+            <td>전화번호</td>
+            <td><input type="text" name="empPhone" style="width:100%;" th:value="${empCommand.empPhone}"></td>
+        </tr>
+        <tr>
+            <td>비상연락처</td>
+            <td><input type="text" name="urgentPhone" style="width:100%;" th:value="${empCommand.urgentPhone}"></td>
+        </tr>
+        <tr>
+            <td>이메일</td>
+            <td><input type="email" name="empEmail" style="width:100%;" th:value="${empCommand.empEmail}"></td>
+        </tr>
+        <tr>
+            <td>주소</td>
+            <td><input type="text" name="empAddr" style="width:100%;" th:value="${empCommand.empAddr}"></td>
+        </tr>
+        <tr>
+            <td>상세주소</td>
+            <td><input type="text" name="empAddrDetail" style="width:100%;" th:value="${empCommand.empAddrDetail}"></td>
+        </tr>
+        <tr>
+            <td>우편번호</td>
+            <td><input type="text" name="empPost" style="width:100%;" th:value="${empCommand.empPost}"></td>
+        </tr>
+        <tr>
+            <td>입사일</td>
+            <td><input type="date" name="empHireDate" style="width:100%;" th:value="${#dates.format(empCommand.empHireDate, 'yyyy-MM-dd')}"></td>
+        </tr>
+
+    </table>
+    <button class="w3-button w3-dark-grey" type="submit" style="margin-top: 10px;">직원수정</button>
+</form>
+
+    <br>
+   </div>
   <hr>
   
   
