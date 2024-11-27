@@ -17,7 +17,7 @@ public class EmpUpdateService {
 		EmployeeDTO dto = new EmployeeDTO();
 		BeanUtils.copyProperties(empCommand, dto);
 		
-		empMapper.empUpdate(empCommand);
+		empMapper.empUpdate(dto);
 		
 	}
 

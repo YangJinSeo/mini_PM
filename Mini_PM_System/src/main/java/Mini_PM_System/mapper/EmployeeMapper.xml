@@ -114,7 +114,7 @@
 		where emp_num = #{empNum}
 	</select>
 	
-	<update id="empUpdate">
+	<update id="empUpdate" parameterType="empDTO">
 		update employees
 		set DEPARTMENT_ID = #{departmentId},
 			JOB_ID = #{jobId},

@@ -18,7 +18,7 @@ public interface EmployeeMapper {
 
 	public EmpDetailDTO selectOne(String empNum);
 
-	public void empUpdate(EmpCommand empCommand);
+	public void empUpdate(EmployeeDTO dto);
 
 	public Integer empCount(String searchWord);
 	
