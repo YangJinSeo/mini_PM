@@ -12,3 +12,4 @@ public class EmpDetailDTO {
 	EmployeeDTO employeeDTO;
 	
 }
+

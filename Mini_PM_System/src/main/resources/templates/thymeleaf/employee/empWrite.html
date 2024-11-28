@@ -119,11 +119,24 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 	    
 	    <tr>
 	        <td>부서코드</td>
-	        <td><input type="text" name="departmentId" style="width:100%;"></td>
+	        <td> <!-- 드롭다운 방식으로.  -->
+		        <select name="departmentId" style="width:50%;">
+		        	<option th:each="dp : ${dp}" th:value="${dp.colName1}">
+		        		[[${dp.colName2}]] [[${dp.colName1}]]
+		        	</option>
+		        </select>
+	  		</td>
 	    </tr>
+	    
 	    <tr>
-	        <td>직무코드</td>
-	        <td><input type="text" name="jobId" style="width:100%;"></td>
+	        <td>직무코드jobId</td>
+	        <td><!-- 드롭다운 방식으로.  -->
+		        <select name="jobId" style="width:50%;">
+		        	<option th:each="job : ${job}" th:value="${job.colName1}">
+		        		[[${job.colName1}]] : [[${job.colName2}]] 
+		        	</option>
+		        </select>
+		    </td>
 	    </tr>
 	    
 	    <tr>

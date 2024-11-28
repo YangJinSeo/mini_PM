@@ -9,5 +9,10 @@
 
 </select>
 
+<select id="dropDown" resultType="dropDTO">
+	select ${col_name1} as colName1, ${col_name2} as colName2
+	from ${table_name}
+</select>
+
 
 </mapper>

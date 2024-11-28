@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>empList</title>
+<title>empDetail</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -35,13 +35,13 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <div class="w3-bar-block">
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i> Close Menu</a>
     <a href="/" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> 근태관리</a>
-    <a href="../employee/empList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-eye fa-fw"></i> 직원관리</a>
-    <a href="../department/dpList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> 부서관리</a>
-    <a href="../personnel/perList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i> 인사현황</a>
-    <a href="../review/reviewList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i> 고과평가</a>
-    <a href="../salary/salaryList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i> 급여관리</a>
-    <a href="../retire/retireList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i> 퇴직자</a>
-    <a href="../setting/settingList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i> 설정</a><br><br>
+    <a href="../../employee/empList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-eye fa-fw"></i> 직원관리</a>
+    <a href="../../department/dpList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> 부서관리</a>
+    <a href="../../personnel/perList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i> 인사현황</a>
+    <a href="../../review/reviewList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i> 고과평가</a>
+    <a href="../../salary/salaryList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i> 급여관리</a>
+    <a href="../../retire/retireList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i> 퇴직자</a>
+    <a href="../../setting/settingList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i> 설정</a><br><br>
   </div>
 </nav>
 
@@ -59,7 +59,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-row-padding w3-margin-bottom">
   
-  	<a href="empList">
+  	<a href="../empList">
     <div class="w3-quarter">
       <div class="w3-container w3-red w3-padding-16">
         <div class="w3-left"><i class="fa fa-list-ul w3-xxxlarge"></i></div>
@@ -70,7 +70,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
     </a>
     
-    <a href="empWrite">
+    <a href="../empWrite">
     <div class="w3-quarter">
       <div class="w3-container w3-blue w3-padding-16">
         <div class="w3-left"><i class="fa fa-pencil-square-o w3-xxxlarge"></i></div>
@@ -97,55 +97,101 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   
   <hr>
 
-  <div class="w3-container">
-    <h5>직원목록</h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-    <form action="dpList" method="get">
-		<tr>
-			<td colspan=5>직원검색 : 
-				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
-				<input type="submit" value="검색" />
-			</td>
-		</tr>
-	</form>
-      
-      <tr>
-        <td>직원번호</td>
-        <td>이름</td>
-        <td>부서코드</td>
-        <td>직무코드</td>
-        <td>입사일</td>
-      </tr>
-      
-      <tr th:each="empCommand, idx : ${list}">
-        <td><a th:href="|empDetail/${empCommand.empNum}|">[[${empCommand.empNum}]]</a></td>
-        <td><a th:href="|empDetail/${empCommand.empNum}|">[[${empCommand.empName}]]</a></td>
-        <td>[[${empCommand.departmentId}]]</td>
-        <td>[[${empCommand.jobId}]]</td>
-        <td>[[${#dates.format(empCommand.empHireDate, 'yyyy-MM-dd')}]]</td>
-      </tr>
-      
-     <tr>
-		<th colspan="5" style="text-align: center;">
-			<span th:if="${page <= 1}">[이전]</span>
-			<span th:if="${page > 1}">
-			<a th:href="|empList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
-			</span>
-			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|empList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
-			</th:block>
-			<span th:if="${page < maxPage}">
-			<a th:href="@{empList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
-			</span>
-			<span th:if="${page >= maxPage}">
-			[다음]
-			</span>			
-		</th>
-	 </tr>
-     
-    </table><br>
+  
+  <div class="w3-panel">
+    <div class="w3-row-padding" style="margin:0 -16px, width: 100%; max-width: 800px" >
+      <div class="w3-third">
+        
+      </div>
+
+      <div class="w3-twothird">
+        <h5>Feeds</h5>
+        <table class="w3-table w3-striped w3-white">
+            
+	        
+	        <tr>
+	            <td>사원 번호</td>
+	            <td>[[${dto.employeeDTO.empNum}]]</td>
+	        </tr>
+	        <tr>
+	            <td>이름</td>
+	            <td>[[${dto.employeeDTO.empName}]]</td>
+	        </tr>
+	        
+	        <tr>
+            <td>부서</td>
+            <td>[[${dto.departmentName}]] 
+             [[${dto.employeeDTO.departmentId}]]</td>
+	        </tr>
+	        <tr>
+	            <td>직무</td>
+	            <td>[[${dto.employeeDTO.jobId}]] : 
+	             [[${dto.jobName}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>직책</td>
+	            <td>[[${dto.employeeDTO.position}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>고용 형태</td>
+	            <td>[[${dto.employeeDTO.empForm}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>아이디</td>
+	            <td>[[${dto.employeeDTO.empId}]]</td>
+	        </tr>
+	        <tr>
+	            <td>비밀번호</td>
+	            <td>[[${dto.employeeDTO.empPw}]]</td>
+	        </tr>
+	        <tr>
+	            <td>주소</td>
+	            <td>[[${dto.employeeDTO.empAddr}]]</td>
+	        </tr>
+	        <tr>
+	            <td>상세 주소</td>
+	            <td>[[${dto.employeeDTO.empAddrDetail}]]</td>
+	        </tr>
+	        <tr>
+	            <td>우편번호</td>
+	            <td>[[${dto.employeeDTO.empPost}]]</td>
+	        </tr>
+	        <tr>
+	            <td>전화번호</td>
+	            <td>[[${dto.employeeDTO.empPhone}]]</td>
+	        </tr>
+	        <tr>
+	            <td>이메일</td>
+	            <td>[[${dto.employeeDTO.empEmail}]]</td>
+	        </tr>
+	        <tr>
+	            <td>긴급 연락처</td>
+	            <td>[[${dto.employeeDTO.urgentPhone}]]</td>
+	        </tr>
+	        <tr>
+	            <td>주민등록번호</td>
+	            <td>[[${dto.employeeDTO.empJumin}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>입사일</td>
+	            <td>[[${#dates.format(dto.employeeDTO.empHireDate, 'yyyy-MM-dd')}]]</td>
+	        </tr>
+	        
+	        <tr>
+	        	<td colspan="2" >
+	        		<a th:href="|../empUpdate?num=${dto.employeeDTO.empNum}|">수정</a> / 
+	        		<a th:href="|../empDelete?num=${dto.employeeDTO.empNum}|">퇴사</a>
+	        	</td>
+	        </tr>
+	        
+        </table>
+      </div>
+    </div>
   </div>
-  <hr>
   
   
   <br>
