@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>부서검색</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	departmentList();
+});
+function departmentList(page){
+	$.ajax({
+		type : "post",
+		url : "departmentsList",
+		data : {"searchWord" : $("#searchWord").val(), "page" : page},
+		dataType : "json",
+		success : function(result){
+			var item = '';
+			item += '<table>'; 
+			item += '<tr><th>';
+			item += '직원검색 : ';
+			item +=	'<input type="search" name="searchWord" id="searchWord" value="'+result.searchWord+'" />';
+			item += '<button onclick="departmentList(' + result.page +')">검색</button>';
+			item += '</th></tr>';
+			item += '</table>';
+			item +=	'<table border=1 width="600" align="center">';
+			item +=	'	<tr>';
+			item +=	'		<th>번호</th><th>부서코드</th><th>부서명</th><th>부서장</th>';
+			item +=	'	</tr>';
+			$.each(result.list , function(idx, dto) {
+				item +=	'	<tr> '; 
+				item +=	'		<th>'+ (idx + 1)+' </th>';
+				item +='         <th><a href="javascript:departments( \''+ dto.departmentId + '\')">'+ dto.departmentId +'</a></th>' ;
+				item +='         <th><a href="javascript:departments( \''+ dto.departmentId + '\')">'+ dto.departmentName +'</a></th>' ;
+				item +='         <th><a href="javascript:departments( \''+ dto.departmentId + '\')">'+ dto.managerId +'</a></th>'; 
+				item += '	</tr>';
+				
+			});
+
+			item +=	'<tr align="center"><td colspan="6">';
+			if(result.page <= 1){
+				item +=	'[이전]';
+			}
+			else{
+				item +=	'<a href="javascript:departmentList('+ (result.page - 1) + ')">[이전]</a>';
+			}					
+			var startPage = result.startPage; 
+			var endPage = result.endPage; 
+			while (startPage <= endPage){
+				item +=	'<a href="javascript:departmentList('+ startPage + ')">['+startPage+']</a> ';
+				startPage++;
+			}
+			if(result.page >= result.maxPage){
+				item +=	'[다음]';
+			}
+			if(result.page < result.maxPage){
+				item +=	'<a href="javascript:departmentList('+ (result.page + 1) + ')">[다음]</a>';
+			}
+			item +=	'</td></tr>';
+			item +=	'</table>';
+
+			$("#dpsList").html(item);
+		},
+		error : function(){
+			alert("서버오류");
+		}
+	});
+}
+function departments(departmentName){
+	$(opener.document).find("#nextdpName").val(departmentName);
+	window.self.close();
+}
+</script>
+
+</head>
+<body>
+직원검색<br />
+<span id="dpsList"></span>
+</body>
+</html>

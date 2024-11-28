@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>직원검색</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	employeeList();
+});
+function employeeList(page){
+	$.ajax({
+		type : "post",
+		url : "employeesList",
+		data : {"searchWord" : $("#searchWord").val(), "page" : page},
+		dataType : "json",
+		success : function(result){
+			var item = '';
+			item += '<table>'; 
+			item += '<tr><th>';
+			item += '직원검색 : ';
+			item +=	'<input type="search" name="searchWord" id="searchWord" value="'+result.searchWord+'" />';
+			item += '<button onclick="employeeList(' + result.page +')">검색</button>';
+			item += '</th></tr>';
+			item += '</table>';
+			item +=	'<table border=1 width="600" align="center">';
+			item +=	'	<tr>';
+			item +=	'		<th>번호</th><th>직원번호</th><th>직원명</th><th>부서</th>';
+			item +=	'	</tr>';
+			$.each(result.list , function(idx, dto) {
+				item +=	'	<tr> '; 
+				item +=	'		<th>'+ (idx + 1)+' </th>';
+				item +='         <th><a href="javascript:employees(\'' + dto.empNum +'\'';
+				item +='		      , \''+ dto.departmentId + '\')">'+ dto.empNum +'</a></th>' ;
+				item +='         <th><a href="javascript:employees(\'' + dto.empNum +'\'';
+				item +='		      , \''+ dto.departmentId + '\')">'+ dto.empName +'</a></th>' ;
+				item +='         <th><a href="javascript:employees(\'' + dto.empNum +'\'';
+				item +='		      , \''+ dto.departmentId + '\')">'+ dto.departmentId +'</a></th>'; 
+				item += '	</tr>';
+				
+			});
+
+			item +=	'<tr align="center"><td colspan="6">';
+			if(result.page <= 1){
+				item +=	'[이전]';
+			}
+			else{
+				item +=	'<a href="javascript:employeeList('+ (result.page - 1) + ')">[이전]</a>';
+			}					
+			var startPage = result.startPage; 
+			var endPage = result.endPage; 
+			while (startPage <= endPage){
+				item +=	'<a href="javascript:employeeList('+ startPage + ')">['+startPage+']</a> ';
+				startPage++;
+			}
+			if(result.page >= result.maxPage){
+				item +=	'[다음]';
+			}
+			if(result.page < result.maxPage){
+				item +=	'<a href="javascript:employeeList('+ (result.page + 1) + ')">[다음]</a>';
+			}
+			item +=	'</td></tr>';
+			item +=	'</table>';
+
+			$("#EmpsList").html(item);
+		},
+		error : function(){
+			alert("서버오류");
+		}
+	});
+}
+function employees(empNum, departmentId){
+	$(opener.document).find("#empNum").val(empNum);
+	$(opener.document).find("#currdpName").val(departmentId);
+	$(opener.document).find("#managerId").val(empNum);
+	window.self.close();
+}
+</script>
+
+</head>
+<body>
+직원검색<br />
+<span id="EmpsList"></span>
+</body>
+</html>
