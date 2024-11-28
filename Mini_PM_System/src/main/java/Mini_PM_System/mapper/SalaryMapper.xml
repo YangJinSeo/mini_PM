@@ -18,7 +18,7 @@
 	<where>
 		<if test="searchWord != null">
 			emp_num like '%' || #{searchWord} || '%'
-			account like '%' || #{searchWord} || '%'
+			or account like '%' || #{searchWord} || '%'
 		</if>
 	</where>
 </select>

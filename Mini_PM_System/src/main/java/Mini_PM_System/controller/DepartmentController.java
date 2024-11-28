@@ -47,11 +47,6 @@ public class DepartmentController {
 		departmentInsertService.execute(departmentCommand);
 		return "redirect:dpList";
 	}
-	@GetMapping("dpDetail")
-	public String dpDetail(String departmentId, Model model) {
-		departmentDetailService.execute(departmentId, model);
-		return "thymeleaf/department/dpDetail";
-	};
 	
 	@GetMapping("dpUpdate")
 	public String dpUpdate(String departmentId, Model model) {

@@ -93,16 +93,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
    
     <form action="perList" method="get">
 		<tr>
-			<td colspan=5>
-			<select name="perKind">
-			<option value="직원번호">직원번호</option>
-			<option>현재부서</option>
-			<option>이동부서</option>
-			<option>이동직급</option>
-			<option>승인일자</option>
-			<option>발령일자</option>
-			<option>발령상태</option>
-		</select>
+			<td colspan="7">
 				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
 				<input type="submit" value="검색" />
 			</td>
@@ -119,7 +110,24 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
  			<td>[[${dto.appointmentDate}]]</td>
  			<td>[[${dto.appointmentState}]]</td>
  		</tr>
- 		
+ 		<tr>
+		<th colspan="7" style="text-align: center;">
+			<span th:if="${page <= 1}">[이전]</span>
+			<span th:if="${page > 1}">
+			<a th:href="|perList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
+			</span>
+			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
+				[<a th:href="|perList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
+			</th:block>
+			<span th:if="${page < maxPage}">
+			<a th:href="@{perList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
+			</span>
+			<span th:if="${page >= maxPage}">
+			[다음]
+			</span>			
+		</th>
+	</tr>
+ 	</table>
 </div>
 </body>
 </html>
