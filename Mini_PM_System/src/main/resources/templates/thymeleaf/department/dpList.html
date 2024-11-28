@@ -39,10 +39,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="/" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> 근태관리</a>
     <a href="../employee/empList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  직원관리</a>
     <a href="../department/dpList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  부서관리</a>
-    <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  인사현황</a>
-    <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  고과평가</a>
-    <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  급여관리</a>
-    <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  퇴사자</a>
+    <a href="../personnel/perList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  인사현황</a>
+    <a href="../review/reviewList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  고과평가</a>
+    <a href="../payment/paymentList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  급여관리</a>
+    <a href="../retire/retireList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  퇴사자</a>
     <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  설정</a><br><br>
   </div>
 </nav>
@@ -97,16 +97,18 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 			</td>
 		</tr>
 	</form>
-      <tr><td>부서코드</td><td>부서명</td><td>부서장</td><td>부서위치</td><td>부서업무</td></tr>
- 		<tr th:each="dto : ${list}">
+      <tr><td>부서코드</td><td>부서명</td><td>부서장</td><td>부서위치</td><td>부서업무</td><td></td></tr>
+ 		<tr th:each="dto: ${list}">
  			<td>[[${dto.departmentId}]]</td>
  			<td>[[${dto.departmentName}]]</td>
  			<td>[[${dto.managerId}]]</td>
  			<td>[[${dto.officeLoc}]]</td>
  			<td style="width: 50%;">[[${dto.duty}]]</td>
+ 			<td><a th:href="@{dpUpdate(departmentId=${dto.departmentId})}|">수정</a>
+ 			/<a th:href="@{dpDelete(departmentId=${dto.departmentId})}|">삭제</a></td>
  		</tr>
  		<tr>
-		<th colspan="5" style="text-align: center;">
+		<th colspan="6" style="text-align: center;">
 			<span th:if="${page <= 1}">[이전]</span>
 			<span th:if="${page > 1}">
 			<a th:href="|dpList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>

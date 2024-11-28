@@ -12,6 +12,7 @@ public interface DepartmentMapper {
 	public Integer dpInsert(DepartmentDTO dto);
 	public List<DepartmentDTO> dpSelectList(StartEndPageDTO sepDTO);
 	public Integer dpCount(String searchWord);
-	public String getDpName();
-	public String getDpName1();
+	public DepartmentDTO dpSelectOne(String departmentId);
+	public Integer dpUpdate(DepartmentDTO dto);
+	public void dpDelete(String departmentId);
 }
