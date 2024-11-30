@@ -22,4 +22,71 @@
 	<delete id="empDelete" parameterType="string">
 		delete from employees where emp_num = #{num}
 	</delete>
+	
+	
+	<sql id="selectCol">
+		RETIRE_NUM, RETIRE_EMP_NUM, RETIRE_NAME, RETIRE_PHONE, HIRE_DATE
+		, FINAL_POSITION, FINAL_DP_ID, RETIRE_DATE
+	</sql>
+	
+	<select id="selectList" resultType="retireDTO">
+	 	select * from (select row_number() over(order by RETIRE_NUM) as rn,
+	 		<include refid="selectCol"/> from retire
+	 		<where>
+				<if test="searchWord != null">
+					RETIRE_NUM like '%' || #{searchWord} || '%'
+					or FINAL_DP_ID like '%' || #{searchWord} || '%'
+					or RETIRE_EMP_NUM like '%' || #{searchWord} || '%'
+					or RETIRE_NAME like '%' || #{searchWord} || '%'
+					or RETIRE_PHONE like '%' || #{searchWord} || '%'
+					or HIRE_DATE like '%' || #{searchWord} || '%'
+					or RETIRE_DATE like '%' || #{searchWord} || '%'
+				</if>
+			</where>
+					) 
+		where rn between #{startRow} and #{endRow}
+	</select>
+	
+	<select id="count" resultType="integer">
+		select count(*) from retire
+		<where>
+				<if test="searchWord != null">
+					RETIRE_NUM like '%' || #{searchWord} || '%'
+					or FINAL_DP_ID like '%' || #{searchWord} || '%'
+					or RETIRE_EMP_NUM like '%' || #{searchWord} || '%'
+					or RETIRE_NAME like '%' || #{searchWord} || '%'
+					or RETIRE_PHONE like '%' || #{searchWord} || '%'
+					or HIRE_DATE like '%' || #{searchWord} || '%'
+					or RETIRE_DATE like '%' || #{searchWord} || '%'
+				</if>
+		</where>
+	</select>
+	
+	<insert id="write" parameterType="retireDTO">
+		insert into retire(<include refid="baseCol"/>)
+		values(#{retireEmpNum}, #{retireName}, #{retirePhone}, #{hireDate}
+				, #{finalPosition}, #{finalDpId}, #{retireDate})
+	</insert>
+	
+	<select id="selectOne" parameterType="string" resultType="retireDTO">
+		select <include refid="selectCol"/> from retire
+		where RETIRE_NUM = #{retireNum}
+	</select>
+	
+	<update id="update" parameterType="retireDTO">
+		update retire
+		set RETIRE_EMP_NUM = #{retireEmpNum}, 
+			RETIRE_NAME = #{retireName}, 
+			RETIRE_PHONE = #{retirePhone}, 
+			HIRE_DATE = #{hireDate}, 
+			RETIRE_DATE = #{retireDate}, 
+			FINAL_POSITION = #{finalPosition}, 
+			FINAL_DP_ID = #{finalDpId} 
+		where RETIRE_NUM = #{retireNum}
+	</update>
+	
+	<delete id="delete" parameterType="string">
+		delete from retire where RETIRE_NUM = #{num}
+	</delete>
+	
 </mapper>

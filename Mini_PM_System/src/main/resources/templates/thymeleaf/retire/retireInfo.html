@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>retireList</title>
+<title>retireInfo</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -88,52 +88,59 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   <hr>
 
   <div class="w3-container">
-    <h5>퇴사자목록</h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-      <form action="retireList" method="get">
-		<tr>
-			<td colspan=5>직원검색 : 
-				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
-				<input type="submit" value="검색" />
-			</td>
-		</tr>
-	</form>
-      
-      
-      <tr>
-        <td>퇴사번호</td>
-        <td>직원번호</td>
-        <td>이름</td>
-        <td>퇴사일</td>
-      </tr>
-      
-      <tr th:each="dto : ${list}">
-      	<td><a th:href="|retireInfo?num=${dto.retireNum}|">[[${dto.retireNum}]]</a></td>
-      	<td><a th:href="|retireInfo?num=${dto.retireNum}|">[[${dto.retireEmpNum}]]</a></td>
-      	<td><a th:href="|retireInfo?num=${dto.retireNum}|">[[${dto.retireName}]]</a></td>
-      	<td>[[${#dates.format(dto.retireDate, 'yyyy-MM-dd')}]]</td>
-      </tr>
-      
-      <tr>
-		<th colspan="5" style="text-align: center;">
-			<span th:if="${page <= 1}">[이전]</span>
-			<span th:if="${page > 1}">
-			<a th:href="|retireList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
-			</span>
-			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|retireList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
-			</th:block>
-			<span th:if="${page < maxPage}">
-			<a th:href="@{retireList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
-			</span>
-			<span th:if="${page >= maxPage}">
-			[다음]
-			</span>			
-		</th>
-	 </tr>
-     
-    </table>
-    <br>
+   
+    <table class="w3-table w3-striped w3-white">
+            
+            <tr>
+            	<td>퇴사 번호</td>
+            	<td>[[${retireCommand.retireNum}]]</td>
+            </tr>
+	        
+	        <tr>
+	            <td>사원 번호</td>
+	            <td>[[${retireCommand.retireEmpNum}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>이름</td>
+	            <td>[[${retireCommand.retireName}]]</td>
+	        </tr>
+	        
+	        <tr>
+            <td>부서</td>
+            <td>[[${retireCommand.finalDpId}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>직책</td>
+	            <td>[[${retireCommand.finalPosition}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>전화번호</td>
+	            <td>[[${retireCommand.retirePhone}]]</td>
+	        </tr>
+	        
+	        
+	        <tr>
+	            <td>입사일</td>
+	            <td>[[${#dates.format(retireCommand.hireDate, 'yyyy-MM-dd')}]]</td>
+	        </tr>
+	        
+	        <tr>
+	            <td>퇴사일</td>
+	            <td>[[${#dates.format(retireCommand.retireDate, 'yyyy-MM-dd')}]]</td>
+	        </tr>
+	        
+	        <tr>
+	        	<td colspan="2" >
+	        		<a th:href="|retireUpdate?num=${retireCommand.retireNum}|">수정</a> / 
+	        		<a th:href="|retireDelete?num=${retireCommand.retireNum}|">삭제</a>
+	        	</td>
+	        </tr>
+	        
+        </table>
+        <br>
   </div>
   <hr>
   

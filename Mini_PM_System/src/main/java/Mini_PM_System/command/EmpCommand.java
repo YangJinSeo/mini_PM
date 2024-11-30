@@ -45,6 +45,7 @@ public class EmpCommand {
 	@NotBlank(message = "이메일을 입력하십시오.")
 	String empEmail;
 	
+	@NotNull(message = "입사일을 선택하십시오.")
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date empHireDate;
 	

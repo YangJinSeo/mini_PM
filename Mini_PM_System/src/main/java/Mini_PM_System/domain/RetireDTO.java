@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class RetireDTO {
 	String retireNum;
+	String retireEmpNum;
 	String retireName;
 	String retirePhone;
 	Date hireDate;

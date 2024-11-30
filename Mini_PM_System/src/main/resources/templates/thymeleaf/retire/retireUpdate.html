@@ -2,7 +2,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>retireList</title>
+<title>retireupdate</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/static/js/daumAddressScript.js"></script>
+<script type="text/javascript" src="/static/js/check.js"></script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -63,7 +68,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <div class="w3-quarter">
       <div class="w3-container w3-red w3-padding-16">
         <div class="w3-left"><i class="fa fa-list-ul w3-xxxlarge"></i></div>
-        <div class="w3-right"></div>
+        <div class="w3-right">
+        <h3></h3>
+        </div>
         <div class="w3-clear"></div>
         <h4>퇴사자 목록</h4>
       </div>
@@ -75,7 +82,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
       <div class="w3-container w3-blue w3-padding-16">
         <div class="w3-left"><i class="fa fa-pencil-square-o w3-xxxlarge"></i></div>
         <div class="w3-right">
-          
+          <h3></h3>
         </div>
         <div class="w3-clear"></div>
         <h4>퇴사자 등록</h4>
@@ -83,58 +90,92 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
     </a>
     
+   
   </div>
   
   <hr>
 
   <div class="w3-container">
-    <h5>퇴사자목록</h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-      <form action="retireList" method="get">
-		<tr>
-			<td colspan=5>직원검색 : 
-				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
-				<input type="submit" value="검색" />
-			</td>
-		</tr>
-	</form>
-      
-      
-      <tr>
-        <td>퇴사번호</td>
-        <td>직원번호</td>
-        <td>이름</td>
-        <td>퇴사일</td>
-      </tr>
-      
-      <tr th:each="dto : ${list}">
-      	<td><a th:href="|retireInfo?num=${dto.retireNum}|">[[${dto.retireNum}]]</a></td>
-      	<td><a th:href="|retireInfo?num=${dto.retireNum}|">[[${dto.retireEmpNum}]]</a></td>
-      	<td><a th:href="|retireInfo?num=${dto.retireNum}|">[[${dto.retireName}]]</a></td>
-      	<td>[[${#dates.format(dto.retireDate, 'yyyy-MM-dd')}]]</td>
-      </tr>
-      
-      <tr>
-		<th colspan="5" style="text-align: center;">
-			<span th:if="${page <= 1}">[이전]</span>
-			<span th:if="${page > 1}">
-			<a th:href="|retireList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
-			</span>
-			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|retireList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
-			</th:block>
-			<span th:if="${page < maxPage}">
-			<a th:href="@{retireList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
-			</span>
-			<span th:if="${page >= maxPage}">
-			[다음]
-			</span>			
-		</th>
-	 </tr>
-     
+    <h5>퇴사자 수정</h5>
+    <form action="retireUpdate" method="post" th:object="${retireCommand}">
+    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" style="width: 80%;">
+        <tr>
+        	<td>퇴사 번호</td>
+        	<td>
+        		<input type="text" name="retireNum" style="width:100%;" 
+        			readonly="readonly"	th:value="${retireCommand.retireNum}">
+        	</td>
+        </tr>
+        
+        <tr>
+            <td>사원번호</td>
+            <td>
+                <input type="text" name="retireEmpNum" style="width:100%;" th:field="*{retireEmpNum}"/>
+            	<span style="color:red" th:if="${#fields.hasErrors('retireEmpNum')}" th:errors="*{retireEmpNum}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>사원이름</td>
+            <td>
+                <input type="text" name="retireName" style="width:100%;" th:field="*{retireName}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('retireName')}" th:errors="*{retireName}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>부서코드</td>
+            <td>
+                <select name="finalDpId" style="width:50%;">
+                    <option th:each="dp : ${dp}" th:value="${dp.colName1}"
+                    		th:selected="${dp.colName1} == ${retireCommand.finalDpId}">
+                        [[${dp.colName2}]] [[${dp.colName1}]]
+                    </option>
+                </select>
+                <span style="color:red" th:if="${#fields.hasErrors('finalDpId')}" th:errors="*{finalDpId}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>직위</td>
+            <td>
+                <input type="text" name="finalPosition" style="width:100%;" th:field="*{finalPosition}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('finalPosition')}" th:errors="*{finalPosition}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+        	<td>연락처</td>
+        	<td>
+        		<input type="tel" name="retirePhone" style="width:100%;" th:field="*{retirePhone}">
+        		<span style="color:red" th:if="${#fields.hasErrors('retirePhone')}" th:errors="*{retirePhone}"></span>
+        	</td>
+        
+        </tr>
+        
+        <tr>
+            <td>입사일</td>
+            <td>
+                <input type="date" name="hireDate" style="width:100%;" 
+                th:value="${#dates.format(retireCommand.hireDate, 'yyyy-MM-dd')}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>퇴사일</td>
+            <td>
+                <input type="date" name="retireDate" style="width:100%;" 
+                th:value="${#dates.format(retireCommand.retireDate, 'yyyy-MM-dd')}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('retireDate')}" th:errors="*{retireDate}"></span>
+            </td>
+        </tr>
     </table>
+    <button class="w3-button w3-dark-grey" type="submit" style="margin-top: 10px;">퇴사자 수정</button>
+</form>
+
     <br>
-  </div>
+   </div>
   <hr>
   
   
@@ -196,9 +237,6 @@ function w3_close() {
   overlayBg.style.display = "none";
 }
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
