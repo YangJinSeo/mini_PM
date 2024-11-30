@@ -1,0 +1,25 @@
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.RetireMapper">
+	<select id="selectEmpOne" parameterType="string" resultType="empDTO">
+		select DEPARTMENT_ID, POSITION, EMP_NUM
+			, EMP_NAME, EMP_PHONE, EMP_HIRE_DATE
+		from employees where emp_num = #{num}
+	</select>
+	
+	<sql id="baseCol">
+		RETIRE_EMP_NUM, RETIRE_NAME, RETIRE_PHONE, HIRE_DATE
+		, FINAL_POSITION, FINAL_DP_ID, RETIRE_DATE
+	</sql>
+	
+	<insert id="empChangeRetire" parameterType="empDTO">
+		insert into retire( <include refid="baseCol"/> )
+		values(#{empNum}, #{empName}, #{empPhone}, #{empHireDate}
+				, #{position}, #{departmentId}, sysdate)
+	</insert>
+	
+	<delete id="empDelete" parameterType="string">
+		delete from employees where emp_num = #{num}
+	</delete>
+</mapper>

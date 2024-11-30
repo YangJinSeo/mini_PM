@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>empWrite</title>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="/static/js/daumAddressScript.js"></script>
+<script type="text/javascript" src="/static/js/check.js"></script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -101,95 +106,139 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-container">
     <h5>직원등록</h5>
-    <form action="empInsert" method="post">
-    	<input type="hidden" name="empId" value="0000" style="width:100%;">
-		<input type="hidden" name="empPw" value="0000" style="width:100%;">
+    <form action="empInsert" method="post" th:object="${empCommand}">
     <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" style="width: 80%;">
-	    <tr>
-	        <td>사원번호</td>
-	        <td><input type="text" name="empNum" style="width:100%;"
-	        	 readonly="readonly" th:value="${autoNum}"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>사원이름</td>
-	        <td><input type="text" name="empName" style="width:100%;"></td>
-	        
-	    </tr>
-	    
-	    <tr>
-	        <td>부서코드</td>
-	        <td> <!-- 드롭다운 방식으로.  -->
-		        <select name="departmentId" style="width:50%;">
-		        	<option th:each="dp : ${dp}" th:value="${dp.colName1}">
-		        		[[${dp.colName2}]] [[${dp.colName1}]]
-		        	</option>
-		        </select>
-	  		</td>
-	    </tr>
-	    
-	    <tr>
-	        <td>직무코드jobId</td>
-	        <td><!-- 드롭다운 방식으로.  -->
-		        <select name="jobId" style="width:50%;">
-		        	<option th:each="job : ${job}" th:value="${job.colName1}">
-		        		[[${job.colName1}]] : [[${job.colName2}]] 
-		        	</option>
-		        </select>
-		    </td>
-	    </tr>
-	    
-	    <tr>
-	        <td>직위</td>
-	        <td><input type="text" name="position" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>고용형태</td>
-	        <td><input type="text" name="empForm" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>주민등록번호</td>
-	        <td><input type="text" name="empJumin" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>전화번호</td>
-	        <td><input type="text" name="empPhone" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>비상연락처</td>
-	        <td><input type="text" name="urgentPhone" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>이메일</td>
-	        <td><input type="email" name="empEmail" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>주소</td>
-	        <td><input type="text" name="empAddr" style="width:100%;"></td>
-	    </tr>
-	    <tr>
-	        <td>상세주소</td>
-	        <td><input type="text" name="empAddrDetail" style="width:100%;"></td>
-	    </tr>
-	    <tr>
-	        <td>우편번호</td>
-	        <td><input type="text" name="empPost" style="width:100%;"></td>
-	    </tr>
-	    
-	    <tr>
-	        <td>입사일</td>
-	        <td><input type="date" name="empHireDate" style="width:100%;"></td>
-	    </tr>
-	    
+        <tr>
+            <td>사원번호</td>
+            <td>
+                <input type="text" name="empNum" style="width:100%;" readonly="readonly" th:value="${empCommand.empNum}"/>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>사원이름</td>
+            <td>
+                <input type="text" name="empName" style="width:100%;" th:value="${empCommand.empName}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('empName')}" th:errors="*{empName}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>부서코드</td>
+            <td>
+                <select name="departmentId" style="width:50%;">
+                    <option th:each="dp : ${dp}" th:value="${dp.colName1}"
+                    		th:selected="${dp.colName1} == ${empCommand.departmentId}">
+                        [[${dp.colName2}]] [[${dp.colName1}]]
+                    </option>
+                </select>
+                <span style="color:red" th:if="${#fields.hasErrors('departmentId')}" th:errors="*{departmentId}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>직무코드</td>
+            <td>
+                <select name="jobId" style="width:50%;">
+                    <option th:each="job : ${job}" th:value="${job.colName1}"
+                    		th:selected="${job.colName1} == ${empCommand.jobId}">
+                        [[${job.colName1}]] : [[${job.colName2}]]
+                    </option>
+                </select>
+                <span style="color:red" th:if="${#fields.hasErrors('jobId')}" th:errors="*{jobId}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>직위</td>
+            <td>
+                <input type="text" name="position" style="width:100%;" th:value="${empCommand.position}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>고용형태</td>
+            <td>
+            	<select name="empForm" style="width:80%;">
+            		<option value="정규직" th:selected="${empCommand.empForm}=='정규직'">정규직</option>
+            		<option value="계약직" th:selected="${empCommand.empForm}=='계약직'">계약직</option>
+            		<option value="인턴" th:selected="${empCommand.empForm}=='인턴'">인턴</option>
+            		<option value="협력업체" th:selected="${empCommand.empForm}=='협력업체'">협력업체</option>
+            	</select>
+                <span style="color:red" th:if="${#fields.hasErrors('empForm')}" th:errors="*{empForm}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>주민등록번호</td>
+            <td>
+                <input type="text" name="empJumin" style="width:100%;" th:value="${empCommand.empJumin}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('empJumin')}" th:errors="*{empJumin}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>전화번호</td>
+            <td>
+                <input type="text" name="empPhone" style="width:100%;" th:value="${empCommand.empPhone}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('empPhone')}" th:errors="*{empPhone}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>비상연락처</td>
+            <td>
+                <input type="text" name="urgentPhone" style="width:100%;" th:value="${empCommand.urgentPhone}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('urgentPhone')}" th:errors="*{urgentPhone}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>이메일</td>
+            <td>
+                <input type="email" name="empEmail" id="empEmail" style="width:100%;" th:value="${empCommand.empEmail}"/>
+                <span id="CheckEmpEmail"></span>
+                <span style="color:red" th:if="${#fields.hasErrors('empEmail')}" th:errors="*{empEmail}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>주소</td>
+            <td>
+                <input type="text" name="empAddr" readonly="readonly" style="width:80%;" id="sample4_roadAddress" th:value="${empCommand.empAddr}"/>
+                <button type="button" onclick="execDaumPostcode()">주소검색</button>
+                <span style="color:red" th:if="${#fields.hasErrors('empAddr')}" th:errors="*{empAddr}"></span>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>상세주소</td>
+            <td>
+                <input type="text" name="empAddrDetail" style="width:100%;" th:value="${empCommand.empAddrDetail}"/>
+                
+            </td>
+        </tr>
+        
+        <tr>
+            <td>우편번호</td>
+            <td>
+                <input type="text" name="empPost" readonly="readonly" style="width:100%;" id="sample4_postcode" th:value="${empCommand.empPost}"/>
+                
+            </td>
+        </tr>
+        
+        <tr>
+            <td>입사일</td>
+            <td>
+                <input type="date" name="empHireDate" style="width:100%;" th:value="${empCommand.empHireDate}"/>
+                <span style="color:red" th:if="${#fields.hasErrors('empHireDate')}" th:errors="*{empHireDate}"></span>
+            </td>
+        </tr>
     </table>
-        <button class="w3-button w3-dark-grey" type="submit" style="margin-top: 10px;">직원등록</button>
-    </form>
+    <button class="w3-button w3-dark-grey" type="submit" style="margin-top: 10px;">직원등록</button>
+</form>
+
     <br>
    </div>
   <hr>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.LoginMapper">
+	<select id="empEmailCheck" parameterType="string" resultType="Integer">
+		select 1 from employees where emp_email = #{empEmail}
+	</select>
+
+</mapper>
