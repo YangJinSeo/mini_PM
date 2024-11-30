@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.PersonnelMapper">
+<insert id="personnelInsert" parameterType="personnel">
+	insert into personnel(emp_num, curr_dp_name, next_dp_name, next_position
+		, approval_date, appointment_date, appointment_state)
+	values(#{empNum}, #{currdpName}, #{nextdpName}, #{nextPosition}, #{approvalDate}
+			, #{appointmentDate}, #{appointmentState})
+</insert>
+<select id="empSelectList" resultType="empDTO">
+select * from(
+	select rownum rn, DEPARTMENT_ID,JOB_ID, EMP_FORM, POSITION, EMP_NUM, EMP_NAME,EMP_ID
+			, EMP_PW, EMP_ADDR, EMP_ADDR_DETAIL, EMP_POST, EMP_PHONE, EMP_JUMIN, EMP_EMAIL
+			, EMP_HIRE_DATE, URGENT_PHONE
+	  from employees
+	  where emp_num like '%' || #{searchWord} || '%'
+	  or emp_name like '%' || #{searchWord} || '%'
+	  or department_id like '%' || #{searchWord} || '%'
+	  order by emp_num desc
+	 )
+where rn between #{startRow} and #{endRow}
+</select>
+<select id="empSelectListCount" resultType="integer">
+	select count(*) from employees
+</select>
+<select id="personnelSelectList" resultType="personnel">
+	select emp_num, curr_dp_name, next_dp_name, next_position
+		, approval_date, appointment_date, appointment_state
+	from personnel
+	<where>
+		<if test="searchWord != null">
+			emp_num like '%' || #{searchWord} || '%'
+		</if>
+	</where>
+</select>
+<select id="personnelCount" resultType="integer">
+	select count(*) from personnel
+</select>
+<select id="dpSelectList" resultType="department">
+	select * from(select row_number() over(order by department_id) as rn
+		, department_id, department_name, duty, manager_id, office_loc
+	from department
+	  where department_id like '%' || #{searchWord} || '%'
+	  or department_name like '%' || #{searchWord} || '%'
+	  or duty like '%' || #{searchWord} || '%'
+	  order by department_id
+	 )
+where rn between #{startRow} and #{endRow}
+</select>
+<select id="dpSelectListCount" resultType="integer">
+	select count(*) from department
+</select>
+</mapper>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>부서관리</title>
+<title>인사현황</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -38,8 +38,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
     <a href="/" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> 근태관리</a>
     <a href="../employee/empList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  직원관리</a>
-    <a href="../department/dpList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  부서관리</a>
-    <a href="../personnel/perList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  인사현황</a>
+    <a href="../department/dpList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  부서관리</a>
+    <a href="../personnel/perList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-bullseye fa-fw"></i>  인사현황</a>
     <a href="../review/reviewList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  고과평가</a>
     <a href="../payment/paymentList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  급여관리</a>
     <a href="../retire/retireList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  퇴사자</a>
@@ -57,11 +57,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
-    <h5><b> 부서관리</b></h5>
+    <h5><b> 인사현황</b></h5>
   </header>
   
   <div class="w3-row-padding w3-margin-bottom">
-  <a href="dpList">
+  <a href="perList">
     <div class="w3-quarter" style="margin-right: 5px">
       <div class="w3-container w3-red w3-padding-16">
         <div class="w3-left"><i class="fa fa-server w3-xxlarge"></i></div>
@@ -69,11 +69,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
           <h3></h3>
         </div>
         <div class="w3-clear"></div>
-        <h4>부서목록</h4>
+        <h4>인사현황</h4>
       </div>
     </div>
     </a>
-    <a href="dpWrite">
+    <a href="perWrite">
     <div class="w3-quarter">
       <div class="w3-container w3-blue w3-padding-16">
         <div class="w3-left"><i class="fa fa-pencil w3-xxlarge"></i></div>
@@ -81,52 +81,53 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
           <h3></h3>
         </div>
         <div class="w3-clear"></div>
-        <h4>부서등록</h4>
+        <h4>발령</h4>
       </div>
     </div>
     </a>
   </div>
+
 <div class="w3-container">
-    <h5>부서목록</h5>
+    <h5>인사현황</h5>
     <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-    <form action="dpList" method="get">
+   
+    <form action="perList" method="get">
 		<tr>
-			<td colspan=6>
+			<td colspan="7">
 				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
 				<input type="submit" value="검색" />
 			</td>
 		</tr>
 	</form>
-      <tr><td>부서코드</td><td>부서명</td><td>부서장</td><td>부서위치</td><td>부서업무</td><td></td></tr>
- 		<tr th:each="dto: ${list}">
- 			<td>[[${dto.departmentId}]]</td>
- 			<td>[[${dto.departmentName}]]</td>
- 			<td>[[${dto.managerId}]]</td>
- 			<td>[[${dto.officeLoc}]]</td>
- 			<td style="width: 50%;">[[${dto.duty}]]</td>
- 			<td><a th:href="@{dpUpdate(departmentId=${dto.departmentId})}|">수정</a>
- 			/<a th:href="@{dpDelete(departmentId=${dto.departmentId})}|">삭제</a></td>
+      <tr><td>직원번호</td><td>현재부서</td><td>이동부서</td><td>이동직급</td>
+      	  <td>승인일자</td><td>발령일자</td><td>발령상태</td></tr>
+ 		<tr th:each="dto : ${list}">
+ 			<td>[[${dto.empNum}]]</td>
+ 			<td>[[${dto.currdpName}]]</td>
+ 			<td>[[${dto.nextdpName}]]</td>
+ 			<td>[[${dto.nextPosition}]]</td>
+ 			<td>[[${dto.approvalDate}]]</td>
+ 			<td>[[${dto.appointmentDate}]]</td>
+ 			<td>[[${dto.appointmentState}]]</td>
  		</tr>
  		<tr>
-		<th colspan="6" style="text-align: center;">
+		<th colspan="7" style="text-align: center;">
 			<span th:if="${page <= 1}">[이전]</span>
 			<span th:if="${page > 1}">
-			<a th:href="|dpList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
+			<a th:href="|perList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
 			</span>
 			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|dpList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
+				[<a th:href="|perList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
 			</th:block>
 			<span th:if="${page < maxPage}">
-			<a th:href="@{dpList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
+			<a th:href="@{perList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
 			</span>
 			<span th:if="${page >= maxPage}">
 			[다음]
 			</span>			
 		</th>
 	</tr>
-    </table>
-    <br>
+ 	</table>
 </div>
-
 </body>
 </html>

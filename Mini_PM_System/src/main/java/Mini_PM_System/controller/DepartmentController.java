@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import Mini_PM_System.command.DepartmentCommand;
+import Mini_PM_System.service.department.DepartmentDeleteService;
+import Mini_PM_System.service.department.DepartmentDetailService;
 import Mini_PM_System.service.department.DepartmentInsertService;
 import Mini_PM_System.service.department.DepartmentListService;
+import Mini_PM_System.service.department.DepartmentUpdateService;
 
 @Controller
 @RequestMapping("department")
@@ -19,6 +22,12 @@ public class DepartmentController {
 	DepartmentInsertService departmentInsertService;
 	@Autowired
 	DepartmentListService departmentListService;
+	@Autowired
+	DepartmentDetailService departmentDetailService;
+	@Autowired
+	DepartmentUpdateService departmentUpdateService;
+	@Autowired
+	DepartmentDeleteService departmentDeleteService;
 	
 	@GetMapping("dpList")
 	public String dpList(@RequestParam(value = "page", required = true, defaultValue = "1") int page
@@ -36,6 +45,22 @@ public class DepartmentController {
 	@PostMapping("dpInsert")
 	public String dpInsert(DepartmentCommand departmentCommand) {
 		departmentInsertService.execute(departmentCommand);
+		return "redirect:dpList";
+	}
+	
+	@GetMapping("dpUpdate")
+	public String dpUpdate(String departmentId, Model model) {
+		departmentDetailService.execute(departmentId, model);
+		return "thymeleaf/department/dpUpdate";
+	}
+	@PostMapping("dpUpdate") 
+	public String dpUpdate(DepartmentCommand departmentCommand) {
+		departmentUpdateService.execute(departmentCommand);
+		return "redirect:dpList";
+	}
+	@GetMapping("dpDelete")
+	public String dpDelete(String departmentId) {
+		departmentDeleteService.execute(departmentId);
 		return "redirect:dpList";
 	}
 }

@@ -35,4 +35,18 @@ where rn between #{startRow} and #{endRow}
 		</if>
 	</where>
 </select>
+<select id="dpSelectOne" parameterType="string" resultType="department">
+	select department_id, department_name, duty, manager_id, office_loc
+	from department
+	where department_id = #{departmentId}
+</select>
+<update id="dpUpdate" parameterType="department">
+	update department
+	set department_id = #{departmentId}, department_name = #{departmentName}
+		, duty = #{duty}, manager_id = #{managerId}, office_loc = #{officeLoc}
+	where department_id = #{departmentId}
+</update>
+<delete id="dpDelete" parameterType="string">
+	delete from department where department_id = #{departmentId}
+</delete>
 </mapper>
