@@ -118,10 +118,10 @@
 		</dependency>	
 		
 		<!-- 암호화 -->
-		<!--<dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>-->	
+		</dependency>	
 		
 		<!-- validation -->
 		<dependency>
