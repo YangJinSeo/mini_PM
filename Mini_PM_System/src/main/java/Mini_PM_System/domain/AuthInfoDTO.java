@@ -1,5 +1,7 @@
 package Mini_PM_System.domain;
 
+import java.util.Date;
+
 import org.apache.ibatis.type.Alias;
 import lombok.Data;
 
@@ -10,7 +12,6 @@ public class AuthInfoDTO {
 	String userPw;
 	String pmEmpNum;
 	String userName;
-	String departmentId;
-	String jobId;
 	String userApproval;
+	Date registDate;
 }

@@ -2,17 +2,272 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>회원가입</title>
+<title>Insert title here</title>
+<style type="text/css">
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: #f6f5f7;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	font-family: 'Montserrat', sans-serif;
+	height: 100vh;
+	margin: -20px 0 50px;
+}
+
+h1 {
+	font-weight: bold;
+	margin: 0;
+}
+
+h2 {
+	text-align: center;
+}
+
+p {
+	font-size: 14px;
+	font-weight: 100;
+	line-height: 20px;
+	letter-spacing: 0.5px;
+	margin: 20px 0 30px;
+}
+
+span {
+	font-size: 12px;
+}
+
+a {
+	color: #333;
+	font-size: 14px;
+	text-decoration: none;
+	margin: 15px 0;
+}
+
+button {
+	border-radius: 20px;
+	border: 1px solid #FF4B2B;
+	background-color: #FF4B2B;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 12px 45px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	transition: transform 80ms ease-in;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+button:focus {
+	outline: none;
+}
+
+button.ghost {
+	background-color: transparent;
+	border-color: #FFFFFF;
+}
+
+form {
+	background-color: #FFFFFF;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 50px;
+	height: 100%;
+	text-align: center;
+}
+
+input {
+	background-color: #eee;
+	border: none;
+	padding: 12px 15px;
+	margin: 8px 0;
+	width: 100%;
+}
+
+.container {
+	background-color: #fff;
+	border-radius: 10px;
+  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+			0 10px 10px rgba(0,0,0,0.22);
+	position: relative;
+	overflow: hidden;
+	width: 768px;
+	max-width: 100%;
+	min-height: 480px;
+}
+
+.form-container {
+	position: absolute;
+	top: 0;
+	height: 100%;
+	transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+	left: 0;
+	width: 50%;
+	z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+	transform: translateX(100%);
+}
+
+.sign-up-container {
+	left: 0;
+	width: 50%;
+	opacity: 0;
+	z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+	transform: translateX(100%);
+	opacity: 1;
+	z-index: 5;
+	animation: show 0.6s;
+}
+
+@keyframes show {
+	0%, 49.99% {
+		opacity: 0;
+		z-index: 1;
+	}
+	
+	50%, 100% {
+		opacity: 1;
+		z-index: 5;
+	}
+}
+
+.overlay-container {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	width: 50%;
+	height: 100%;
+	overflow: hidden;
+	transition: transform 0.6s ease-in-out;
+	z-index: 100;
+}
+
+.container.right-panel-active .overlay-container{
+	transform: translateX(-100%);
+}
+
+.overlay {
+	background: #FF416C;
+	background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+	background: linear-gradient(to right, #FF4B2B, #FF416C);
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 0 0;
+	color: #FFFFFF;
+	position: relative;
+	left: -100%;
+	height: 100%;
+	width: 200%;
+  	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+  	transform: translateX(50%);
+}
+
+.overlay-panel {
+	position: absolute;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	padding: 0 40px;
+	text-align: center;
+	top: 0;
+	height: 100%;
+	width: 50%;
+	transform: translateX(0);
+	transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+	transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+	transform: translateX(0);
+}
+
+.overlay-right {
+	right: 0;
+	transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+	transform: translateX(20%);
+}
+
+.social-container {
+	margin: 20px 0;
+}
+
+.social-container a {
+	border: 1px solid #DDDDDD;
+	border-radius: 50%;
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 5px;
+	height: 40px;
+	width: 40px;
+}
+
+footer {
+    background-color: #222;
+    color: #fff;
+    font-size: 14px;
+    bottom: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 999;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+footer i {
+    color: red;
+}
+
+footer a {
+    color: #3c97bf;
+    text-decoration: none;
+}
+
+</style>
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
-<!-- ajaxSubmit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
 <script type="text/javascript" src="/static/js/check.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
 <script type="text/javascript">
+
 $(function(){
 	$("#regist").click(function(){
 		$("#frm").ajaxSubmit({  //CSR
 			type: "POST",
-			url: "userRegist",
+			url: "../login/userRegist",
 			beforeSubmit : function(){
 				if($("#userId").val() == ""){
 					alert("아이디를 입력해주세요.");
@@ -34,111 +289,97 @@ $(function(){
 					$("#userName").focus();
 					return false;
 				}
-				if($("#pmEmpNum").val() == 0){
+				if($("#pmEmpNum").val() == ""){
 					alert("직원번호를 입력해주세요.");
 					$("#pmEmpNum").focus();
 					return false;
 				}
 			},
-			success : function(result){
-				if(result==200){
-					location.href="/";
-				}
+			success: function (result) {
+			    if (result === 1) {
+			        alert("회원가입 성공. 로그인을 하십시오.");
+			        location.href = "/";
+			    } else {
+			        alert("회원가입할 수 없습니다.");
+			        location.href = "/";
+			    }
 			},
 			error : function(){
 				alert("서버오류");
+				location.href="/";
 			}
 		});
 	});
 });
 
+
 </script>
 
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-</style>
 </head>
-<body class="w3-light-grey">
-
-<!-- Top container -->
-<div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
-  <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-bar-item w3-right"><a href="#">로그아웃</a></span> <!-- 링크 설정-->
-</div>
-
-<!-- Sidebar/menu -->
-<nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
-  <div class="w3-container w3-row">
-    <div class="w3-col s4">
-      <img src="/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
-    </div>
-    <div class="w3-col s8 w3-bar">
-      <span>안녕하세요, <strong>Mike 님</strong></span><br>
-    </div>
-  </div>
-  <hr>
-  <div class="w3-container">
-    <h5>인사 관리 시스템</h5>
-  </div>
-  <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-    <a href="../attendance/attList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i> 근태관리</a>
-    <a href="../employee/empList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-eye fa-fw"></i>  직원관리</a>
-    <a href="../department/dpList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  부서관리</a>
-    <a href="../personnel/perList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>  인사현황</a>
-    <a href="../review/reviewList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>  고과평가</a>
-    <a href="../payment/paymentList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  급여관리</a>
-    <a href="../retire/retireList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  퇴사자</a>
-    <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  설정</a><br><br>
-  </div>
-</nav>
-
-
-<!-- Overlay effect when opening sidebar on small screens -->
-<div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
-
-<!-- !PAGE CONTENT! -->
-<div class="w3-main" style="margin-left:300px;margin-top:43px;">
-
-  <!-- Header -->
-  <header class="w3-container" style="padding-top:22px">
-    <h5><b> 회원가입</b></h5>
-  </header>
-  
-
-<div class="w3-container">
+<body>
+<h2>PM 인사 관리 시스템</h2>
+<div class="container" id="container">
     <form action="userRegist" method="post" id="frm">
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" style="width: 50%;">
+    <table style="width: 100%;">
+      <caption>직원 인증</caption>
+      <tr>
+      	<td>직원번호</td>
+      	<td>
+      		<input type="text" name="pmEmpNum" id="pmEmpNum" style="width: 100%">
+      		<span id="empNumCheck"></span>
+      	</td>
+      </tr>
+      
+      <tr>
+      	<td>이름</td>
+      	<td>
+      		<input type="text" name="userName" id="userName" style="width:100%;">
+      	</td>
+      </tr>
+      
+      <tr>
+      	<td>주민번호</td>
+      	<td>
+      		<input type="text" name="userJumin" id="userJumin" style="width:100%;">
+      	</td>
+      </tr>
+      
       <tr>
       	<td>아이디</td>
       	<td>
-      		<input type="text" name="userId" id="userId" style="width:100%;">
+      		<input type="text" min="3" maxlength="12"
+      			placeholder="4글자 이상 12글자 이하"
+      			name="userId" id="userId" style="width:100%;">
       		 <span id="idCheck"></span>
       	</td>
       </tr>
+      
       <tr>
-      <td>비밀번호</td>
-      <td><input type="password" name="userPw" id="userPw" style="width:100%;"></td></tr>
+      	<td>비밀번호</td>
+      	<td>
+      		<input type="password" min="3" max="16" 
+      			placeholder="4글자 이상 16글자 이하로 입력하세요." 
+      			name="userPw" id="userPw" style="width:100%;">
+      	</td>
+      </tr>
+      
       <tr>
-      <td>비밀번호 확인</td>
-      <td><input type="password" name="userPwCon" id="userPwCon" style="width:100%;"></td></tr>
-      <tr>
-      <td>이름</td>
-      <td><input type="text" name="userName" id="userName" style="width:100%;"></td></tr>
-      <tr>
-      	<td>직원번호</td>
-      	<td><input type="text" name="pmEmpNum" id="pmEmpNum" style="width: 100%">
-      	</td></tr>
+      	<td>비밀번호 확인</td>
+      	<td>
+      		<input type="password" min="3" max="16" 
+      			placeholder="4글자 이상 16글자 이하로 입력하세요." 
+      			name="userPwCon" id="userPwCon" style="width:100%;">
+      	</td>
+      	</tr>
+      
+      
     </table>
-        <button class="w3-button w3-dark-grey" type="submit" id="regist" style="margin-top: 10px;">회원가입</button>
+        <button class="w3-button w3-dark-grey" type="button" id="regist" style="margin-top: 10px;">회원가입</button>
     </form>
     <br>
 </div>
+
+
 
 </body>
 </html>

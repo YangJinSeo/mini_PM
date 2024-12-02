@@ -4,18 +4,21 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import Mini_PM_System.domain.AuthInfoDTO;
-import Mini_PM_System.domain.LoginDTO;
+import Mini_PM_System.domain.UserDTO;
 
 @Mapper
 public interface LoginMapper {
 
 	public Integer empEmailCheck(@Param("empEmail") String empEmail);
 
-	public void userRegist(LoginDTO dto);
-
 	public Integer idCheck(String userId);
 
-	public Integer userInsert(LoginDTO dto);
+	public Integer userInsert(UserDTO dto);
+
+	public Integer empNumCheck(String empNum);
+
+	public AuthInfoDTO loginSelect(String userId);
+
 
 	
 

@@ -259,30 +259,21 @@ footer a {
 
 </style>
 
-<script type="text/javascript">
-const signUpButton = document.getElementById('signUp');
-const signInButton = document.getElementById('signIn');
-const container = document.getElementById('container');
-
-signUpButton.addEventListener('click', () => {
-	container.classList.add("right-panel-active");
-});
-
-signInButton.addEventListener('click', () => {
-	container.classList.remove("right-panel-active");
-});
-
-</script>
 </head>
 <body>
 <h2>PM 인사 관리 시스템</h2>
 <div class="container" id="container">
 	
 	<div class="form-container sign-in-container">
-		<form action="login/login" method="post">
+		<form action="login/login" method="post" th:object="${loginCommand}">
 			<h1>Sign in</h1>
-			<input type="text" placeholder="아이디" />
-			<input type="password" placeholder="비밀번호" />
+			<input type="text" placeholder="아이디" 
+					name="userId" th:value="${loginCommand.userId}"/>
+			<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></span>
+			
+			<input type="password" placeholder="비밀번호" 
+					name="userPw" th:value="${loginCommand.userPw}"/>
+			<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}"></span>
 			<a href="#">Forgot your password?</a>
 			<button type="submit">Sign In</button>
 		</form>
@@ -293,7 +284,7 @@ signInButton.addEventListener('click', () => {
 				<h1>등록하기</h1>
 				<p>새로 입사하신 분들은 먼저 회원가입을 하셔야 합니다.</p>
 				<button class="ghost" id="signUp" 
-						onclick="location.href='login/userCheck'">Sign Up</button>
+						onclick="location.href='login/userRegist'">Sign Up</button>
 			</div>
 		</div>
 	</div>

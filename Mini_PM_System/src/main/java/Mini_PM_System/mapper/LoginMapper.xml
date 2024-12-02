@@ -3,36 +3,53 @@
 	"-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Mini_PM_System.mapper.LoginMapper">
+
+	<!-- 체크 서비스 -->
+
 	<select id="empEmailCheck" parameterType="string" resultType="integer">
 		select 1 from employees where emp_email = #{empEmail}
 	</select>
-	
-	
-	<sql id="baseCol">
-		USER_ID, USER_PW, USER_NAME, USER_APPROVAL
-		,PM_EMP_NUM, REGIST_DATE
-	</sql>
-	
-	<insert id="userRegist" parameterType="loginDTO">
-		insert into users( <include refid="baseCol"/>)
-		values(#{userId}, #{userPw}, #{userName}, null
-				, #{pmEmpNum}, sysdate)
-	</insert>
 	
 	<select id="idCheck" resultType="integer">
 		select 1 from users where USER_ID = #{userId}
 	</select>
 	
+	<select id="empNumCheck" resultType="integer">
+		select 1 from users where PM_EMP_NUM = #{empNum}
+		union
+		select 1 from employees
+		where emp_num = #{empNum}
+		and DEPARTMENT_ID != 'PM'
+	</select>
+	
+	
+	<!-- 회원가입 -->
+	<sql id="baseCol">
+		USER_ID, USER_PW, USER_NAME, USER_APPROVAL
+		,PM_EMP_NUM, REGIST_DATE
+	</sql>
+	
 	<insert id="userInsert" parameterType="loginDTO">
-		insert into users(USER_ID, USER_PW, USER_NAME
-						, USER_APPROVAL, PM_EMP_NUM, REGIST_DATE)
-		select #{userId}, #{userPw}, emp_name
-				, 'y', emp_num, sysdate
-		from employees
-		where emp_name = #{userName}
-		and emp_num = #{pmEmpNum}
-		and emp_jumin = #{userJumin}
-		and DEPARTMENT_ID = 'PM'
+		INSERT INTO users(USER_ID, USER_PW, USER_NAME
+                 , USER_APPROVAL, PM_EMP_NUM, REGIST_DATE)
+		SELECT #{userId}, #{userPw}, emp_name
+       			, 'y', emp_num, SYSDATE
+		FROM employees
+		WHERE emp_name = #{userName}
+  			AND emp_num = #{pmEmpNum}
+  			AND emp_jumin = #{userJumin}
+  			AND department_id = 'PM'
+  			AND NOT EXISTS (SELECT 1 FROM users 
+        					WHERE USER_ID = #{userId}
+          					AND PM_EMP_NUM = #{pmEmpNum})
 	</insert>
+	
+	
+	<!-- 로그인 및 세션 -->
+	
+	<select id="loginSelect" resultType="auth">
+		select <include refid="baseCol"/> from users 
+		where USER_ID = #{userId}
+	</select>
 
 </mapper>
