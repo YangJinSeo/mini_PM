@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.AttendanceMapper">
+<select id="attSelectList" resultType="attendance">
+	select att_date, emp_num, att_on_time, att_off_time, att_state
+	from attendance 
+	<where>
+		<if test="searchWord != null">
+			emp_num like '%' || #{searchWord} || '%'
+		</if>
+	</where>
+	order by emp_num 
+</select>
+<select id="attCount" resultType="integer">
+	select count(*) from attendance
+	<where>
+		<if test="searchWord != null">
+			emp_num like '%' || #{searchWord} || '%'
+		</if>
+	</where>
+</select>
+<select id="attCount1" resultType="integer">
+	select count(*) from attendance 
+	where att_state = '출근'
+</select>
+<select id="attCount2" resultType="integer">
+	select count(*) from attendance 
+	where att_state = '결근'
+</select>
+<select id="attCount3" resultType="integer">
+	select count(*) from attendance 
+	where att_state = '지각'
+</select>
+</mapper>
