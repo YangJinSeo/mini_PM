@@ -12,4 +12,6 @@ public interface ReviewMapper {
 	public int reviewInsert(ReviewDTO dto);
 	public List<ReviewDTO> reviewSelectList(StartEndPageDTO sepDTO);
 	public int reviewCount(String searchWord);
+	public ReviewDTO reviewSelectOne(String empNum);
+	public int reviewUpdate(ReviewDTO dto);
 }

@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import Mini_PM_System.command.ReviewCommand;
+import Mini_PM_System.service.review.ReviewDetailService;
 import Mini_PM_System.service.review.ReviewInsertService;
 import Mini_PM_System.service.review.ReviewListService;
+import Mini_PM_System.service.review.ReviewUpdateService;
 
 @Controller
 @RequestMapping("review")
@@ -19,6 +21,10 @@ public class ReviewController {
 	ReviewInsertService reviewInsertService;
 	@Autowired
 	ReviewListService reviewListService;
+	@Autowired
+	ReviewDetailService reviewDetailService;
+	@Autowired
+	ReviewUpdateService reviewUpdateService;
 	
 	@GetMapping("reviewList")
 	public String reviewList(@RequestParam(value = "page", required = false, defaultValue = "1") Integer page
@@ -35,6 +41,16 @@ public class ReviewController {
 	@PostMapping("reviewInsert")
 	public String reviewInsert(ReviewCommand reviewCommand) {
 		reviewInsertService.execute(reviewCommand);
+		return "redirect:reviewList";
+	}
+	@GetMapping("reviewUpdate")
+	public String reviewUpdate(String empNum, Model model) {
+		reviewDetailService.execute(empNum, model);
+		return "thymeleaf/review/reviewUpdate";
+	}
+	@PostMapping("reviewUpdate")
+	public String reviewUpdate(ReviewCommand reviewCommand) {
+		reviewUpdateService.execute(reviewCommand);
 		return "redirect:reviewList";
 	}
 }

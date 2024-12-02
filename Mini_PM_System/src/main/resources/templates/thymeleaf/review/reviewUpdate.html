@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>고과평가</title>
+<title>고과평가수정</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
@@ -10,7 +10,6 @@
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>s
 </head>
 <body class="w3-light-grey">
 
@@ -43,7 +42,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="../review/reviewList" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-diamond fa-fw"></i>  고과평가</a>
     <a href="../payment/paymentList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i>  급여관리</a>
     <a href="../retire/retireList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  퇴사자</a>
-    <a href="../" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  설정</a><br><br>
+    <a href="../setting/settingList" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  설정</a><br><br>
   </div>
 </nav>
 
@@ -57,71 +56,18 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
-    <h5><b> 고과평가</b></h5>
+    <h5><b> 고과평가수정</b></h5>
   </header>
   
-  <div class="w3-row-padding w3-margin-bottom">
-  <a href="reviewList">
-    <div class="w3-quarter" style="margin-right: 5px">
-      <div class="w3-container w3-red w3-padding-16">
-        <div class="w3-left"><i class="fa fa-server w3-xxlarge"></i></div>
-        <div class="w3-right">
-          <h3></h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>고과평가목록</h4>
-      </div>
-    </div>
-    </a>
-    <a href="reviewWrite">
-    <div class="w3-quarter">
-      <div class="w3-container w3-blue w3-padding-16">
-        <div class="w3-left"><i class="fa fa-pencil w3-xxlarge"></i></div>
-        <div class="w3-right">
-          <h3></h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>고과평가등록</h4>
-      </div>
-    </div>
-    </a>
-  </div>
-<div class="w3-container">
-    <h5>고과평가목록</h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-    <form action="reviewList" method="get">
-		<tr>
-			<td colspan=3>
-				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
-				<input type="submit" value="검색" />
-			</td>
-		</tr>
-	</form>
-      <tr><td>직원번호</td><td>평가내용</td><td>점수</td><td></td></tr>
- 		<tr th:each="dto : ${list}">
-	 		<td>[[${dto.empNum}]]</td>
-	 		<td>[[${dto.empComment}]]</td>
-	 		<td>[[${dto.score}]]/10점</td>
-	 		<td><a th:href="@{reviewUpdate(empNum=${dto.empNum})}|">수정</a></td>
- 		</tr>
- 		<tr>
-		<th colspan="4" style="text-align: center;">
-			<span th:if="${page <= 1}">[이전]</span>
-			<span th:if="${page > 1}">
-			<a th:href="|reviewList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
-			</span>
-			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|reviewList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
-			</th:block>
-			<span th:if="${page < maxPage}">
-			<a th:href="@{reviewList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
-			</span>
-			<span th:if="${page >= maxPage}">
-			[다음]
-			</span>			
-		</th>
-	</tr>
-    </table>
+  <div class="w3-container">
+    <form action="reviewUpdate" method="post" >
+    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white" style="width: 55%;" th:object="${reviewCommand}">
+      <tr><td>직원번호</td><td style="display: flex;"><input type="text" name="empNum" id="empNum" th:field="*{empNum}" style="flex: 1; margin-right: 10px;" readonly="readonly"></td>
+      <tr><td>평가내용</td><td><textarea cols="50" rows="5" name="empComment" th:field="*{empComment}"  required="required"></textarea></td></tr>
+      <tr><td>점수</td><td><input type="number" min="1" max="10" name="score" th:field="*{score}" required="required"> 점</td></tr>
+      </table>
+        <button class="w3-button w3-dark-grey" type="submit" style="margin-top: 10px;">저장</button>
+    </form>
     <br>
 </div>
 

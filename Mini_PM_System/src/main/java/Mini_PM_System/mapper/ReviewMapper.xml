@@ -18,4 +18,13 @@
 		</if>
 	</where>
 </select>
+<select id="reviewSelectOne" parameterType="string" resultType="review">
+	select emp_num, emp_comment, score from review
+	where emp_num = #{empNum}
+</select>
+<update id="reviewUpdate" parameterType="review">
+	update review
+	set emp_comment = #{empComment}, score = #{score}
+	where emp_num = #{empNum}
+</update>
 </mapper>
