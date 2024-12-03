@@ -12,4 +12,7 @@ public class LoginCommand {
 	@NotBlank(message = "비밀번호를 입력하세요.")
 	@Size(min = 4, max = 16)
 	String userPw;
+	
+	Boolean autoLogin;
+	Boolean idStore;
 }

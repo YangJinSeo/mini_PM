@@ -14,6 +14,8 @@ import Mini_PM_System.command.UserCommand;
 import Mini_PM_System.service.CheckService;
 import Mini_PM_System.service.login.UserLoginService;
 import Mini_PM_System.service.login.UserRegistService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -62,8 +64,9 @@ public class LoginController {
 	@PostMapping("login")
 	public String login(@Validated LoginCommand loginCommand
 						, BindingResult result
-						, HttpSession session) {
-		userLoginService.execute(loginCommand, result ,session);
+						, HttpSession session
+						, HttpServletResponse response) {
+		userLoginService.execute(loginCommand, result ,session, response);
 		// 오류가 있으면 index 페이지가 열리게 만들자.
 		if (result.hasErrors()) {
 			return "redirect:/";
@@ -73,8 +76,14 @@ public class LoginController {
 	
 	//// 로그아웃
 	@GetMapping("logout")
-	public String logout(HttpSession session) {
-		session.invalidate();
+	public String logout(HttpSession session, HttpServletResponse response) {
+		// 로그아웃에서 해당 쿠키만 삭제
+		Cookie cookie = new Cookie("autoLogin", "");
+		cookie.setPath("/"); 
+		cookie.setMaxAge(0); // 해당쿠키 이름에 수명을 0으로 줘서 다시 사용자에게 보냅니다.
+		response.addCookie(cookie);
+		
+		session.invalidate(); // 로그아웃시 모든 세션 삭제
 		return "redirect:/";
 	}
 	
