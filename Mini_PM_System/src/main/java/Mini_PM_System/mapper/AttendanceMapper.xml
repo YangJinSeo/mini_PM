@@ -6,12 +6,34 @@
 <select id="attSelectList" resultType="attendance">
 	select att_date, emp_num, att_on_time, att_off_time, att_state
 	from attendance 
-	<where>
-		<if test="searchWord != null">
-			emp_num like '%' || #{searchWord} || '%'
+	 <where>
+	 	<if test="(searchWord == null or searchWord == '') and (startDate == null or startDate == '') and (endDate == null or endDate == '')">
+   			att_date BETWEEN TRUNC(SYSDATE) AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
 		</if>
-	</where>
-	order by emp_num 
+            <if test="searchWord != null and searchWord != ''">
+                emp_num LIKE '%' || #{searchWord} || '%'
+            </if>
+
+            <if test="startDate != null and startDate != ''">
+                <if test="searchWord != null or (searchWord != null and searchWord != '')">
+                    AND
+                </if>
+                att_date &gt;= #{startDate}
+            </if>
+
+            <if test="endDate != null  and endDate != ''">
+                <if test="startDate != null or (searchWord != null and searchWord != '')">
+                    AND
+                </if>
+                TRUNC(att_date) &lt;= #{endDate}
+            </if>
+        </where>
+     <if test="searchWord != null or startDate != null or endDate != null">
+		order by att_date
+	</if>
+	 <if test="searchWord == null and startDate == null and endDate == null">
+		order by emp_num asc
+	</if>
 </select>
 <select id="attCount" resultType="integer">
 	select count(*) from attendance
@@ -23,14 +45,14 @@
 </select>
 <select id="attCount1" resultType="integer">
 	select count(*) from attendance 
-	where att_state = '출근'
+	where att_state = '출근' and att_date BETWEEN TRUNC(SYSDATE) AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
 </select>
 <select id="attCount2" resultType="integer">
 	select count(*) from attendance 
-	where att_state = '결근'
+	where att_state = '결근' and att_date BETWEEN TRUNC(SYSDATE) AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
 </select>
 <select id="attCount3" resultType="integer">
 	select count(*) from attendance 
-	where att_state = '지각'
+	where att_state = '지각' and att_date BETWEEN TRUNC(SYSDATE) AND TRUNC(SYSDATE) + INTERVAL '1' DAY - INTERVAL '1' SECOND
 </select>
 </mapper>

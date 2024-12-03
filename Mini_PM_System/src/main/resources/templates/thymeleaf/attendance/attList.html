@@ -8,6 +8,22 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script>
+$(function() {
+  $('input[name="datetimes"]').daterangepicker({
+    timePicker: true,
+    startDate: moment().startOf('hour'),
+    endDate: moment().startOf('hour').add(32, 'hour'),
+    locale: {
+      format: 'M/DD'
+    }
+  });
+});
+</script>
 <style>
 html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 </style>
@@ -58,7 +74,10 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 	
   <!-- Header -->
   <header class="w3-container" style="padding-top:22px">
-    <h5><b> My Dashboard</b></h5>
+    <h5><b> <p id="today-date"></p></b></h5>
+    <script>
+document.getElementById('today-date').textContent = new Date().toISOString().split('T')[0] + " 근태상황";
+</script>
   </header>
   
   <div class="w3-row-padding w3-margin-bottom">
@@ -74,7 +93,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
     <div class="w3-quarter">
       <div class="w3-container w3-blue w3-padding-16">
-        <div class="w3-left"><i class="fa fa-eye w3-xxxlarge"></i></div>
+        <div class="w3-left"><i class="fa fa-minus-circle w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3>[[${count2}]]명</h3>
         </div>
@@ -84,7 +103,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     </div>
     <div class="w3-quarter">
       <div class="w3-container w3-teal w3-padding-16">
-        <div class="w3-left"><i class="fa fa-share-alt w3-xxxlarge"></i></div>
+        <div class="w3-left"><i class="	fa fa-hourglass-end w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3>[[${count3}]]명</h3>
         </div>
@@ -92,24 +111,18 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
         <h4>지각</h4>
       </div>
     </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-orange w3-text-white w3-padding-16">
-        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>50</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Users</h4>
-      </div>
-    </div>
   </div>
 
-	<div class="w3-container">
-    <h5>부서목록</h5>
+	<div class="w3-container" id="att">
+    <h5>근태관리</h5>
     <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
     <form action="attList" method="get">
 		<tr>
 			<td colspan=6>
+				<label for="startDate"></label>
+			    <input type="date" id="startDate" name="startDate" th:value="${startDate}"/>
+			    <label for="endDate">~</label>
+			    <input type="date" id="endDate" name="endDate" th:value="${endDate}"/>
 				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
 				<input type="submit" value="검색" />
 			</td>
