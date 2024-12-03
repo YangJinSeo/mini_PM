@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Alias("loginDTO")
 @Data
-public class LoginDTO {
+public class UserDTO {
 	
 	String userId;
 	String userPw;

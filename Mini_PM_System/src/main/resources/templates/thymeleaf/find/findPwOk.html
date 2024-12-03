@@ -2,10 +2,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>findPw 비밀번호 찾기</title>
 <style type="text/css">
-
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+@import
+	url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
 * {
 	box-sizing: border-box;
@@ -98,8 +98,8 @@ input {
 .container {
 	background-color: #fff;
 	border-radius: 10px;
-  	box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
-			0 10px 10px rgba(0,0,0,0.22);
+	box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px
+		rgba(0, 0, 0, 0.22);
 	position: relative;
 	overflow: hidden;
 	width: 768px;
@@ -138,17 +138,6 @@ input {
 	animation: show 0.6s;
 }
 
-@keyframes show {
-	0%, 49.99% {
-		opacity: 0;
-		z-index: 1;
-	}
-	
-	50%, 100% {
-		opacity: 1;
-		z-index: 5;
-	}
-}
 
 .overlay-container {
 	position: absolute;
@@ -161,7 +150,7 @@ input {
 	z-index: 100;
 }
 
-.container.right-panel-active .overlay-container{
+.container.right-panel-active .overlay-container {
 	transform: translateX(-100%);
 }
 
@@ -177,12 +166,12 @@ input {
 	left: -100%;
 	height: 100%;
 	width: 200%;
-  	transform: translateX(0);
+	transform: translateX(0);
 	transition: transform 0.6s ease-in-out;
 }
 
 .container.right-panel-active .overlay {
-  	transform: translateX(50%);
+	transform: translateX(50%);
 }
 
 .overlay-panel {
@@ -233,69 +222,116 @@ input {
 }
 
 footer {
-    background-color: #222;
-    color: #fff;
-    font-size: 14px;
-    bottom: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    text-align: center;
-    z-index: 999;
+	background-color: #222;
+	color: #fff;
+	font-size: 14px;
+	bottom: 0;
+	position: fixed;
+	left: 0;
+	right: 0;
+	text-align: center;
+	z-index: 999;
 }
 
 footer p {
-    margin: 10px 0;
+	margin: 10px 0;
 }
 
 footer i {
-    color: red;
+	color: red;
 }
 
 footer a {
-    color: #3c97bf;
-    text-decoration: none;
+	color: #3c97bf;
+	text-decoration: none;
 }
-
 </style>
+
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
+<script type="text/javascript" src="/static/js/check.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
+<script type="text/javascript">
+
+$(function(){
+	$("#regist").click(function(){
+		$("#frm").ajaxSubmit({  //CSR
+			type: "POST",
+			url: "../find/findPwChange",
+			beforeSubmit : function(){
+				if($("#newPw").val() == ""){
+					alert("새 비밀번호를 입력해주세요.");
+					$("#newPw").focus();
+					return false;
+				}
+				if($("#newPwCon").val() != $("#newPw").val()){
+					alert("비밀번호를 확인해주세요.");
+					$("#newPwCon").focus();
+					return false;
+				}
+			},
+			success: function (result) {
+			    if (result === 1) {
+			        alert("비밀번호가 수정되었습니다. 다시 로그인해주세요.");
+			        location.href = "/";
+			    } else {
+			        alert("비밀번호 수정이 실패했습니다.");
+			        location.href = "/";
+			    }
+			},
+			error : function(){
+				alert("서버오류");
+				location.href="/";
+			}
+		});
+	});
+});
+
+
+</script>
 
 </head>
 <body>
-<h2>PM 인사 관리 시스템</h2>
-<div class="container" id="container">
-	
-	<div class="form-container sign-in-container">
-		<form action="login/login" method="post" th:object="${loginCommand}">
-			<h1>Sign in</h1>
-			<input type="text" placeholder="아이디" 
-					name="userId" th:value="${loginCommand.userId}"/>
-			<span th:if="${#fields.hasErrors('userId')}" th:errors="*{userId}"></span>
-			
-			<input type="password" placeholder="비밀번호" 
-					name="userPw" th:value="${loginCommand.userPw}"/>
-			<span th:if="${#fields.hasErrors('userPw')}" th:errors="*{userPw}"></span>
-			
-			<div>
-				<a href="find/findId" style="color: blue;">아이디 </a>|
-				<a href="find/findPw" style="color: blue;"> 비밀번호</a> <a>찾기</a>
-			</div>
-			
-			<button type="submit">Sign In</button>
-		</form>
-	</div>
-	<div class="overlay-container">
-		<div class="overlay">
-			<div class="overlay-panel overlay-right">
-				<h1>등록하기</h1>
-				<p>새로 입사하신 분들은 먼저 회원가입을 하셔야 합니다.</p>
-				<button class="ghost" id="signUp" 
-						onclick="location.href='login/userRegist'">Sign Up</button>
-			</div>
+	<h2>비밀번호 찾기</h2>
+	<div class="container" id="container" align="center" >
+		<div th:if="${userPw != null}">
+		<br>
+		<br>
+			<form action="findPwChange" method="post" id="frm">
+				<input type="hidden" name="userId" th:value="${userId}">
+				<table>
+					<caption>[[${userId}]]님의 비밀번호 재설정</caption>
+					<tr>
+						<td>새 비밀번호 : </td>
+						<td>
+							<input type="password" name="newPw" 
+									id="newPw"	>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>새 비밀번호 확인 :</td>
+						<td>
+							<input type="password" name="newPwCon" 
+									id="newPwCon"	>
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="2">
+							<button class="w3-button w3-dark-grey" type="button" id="regist" 
+         					style="margin-top: 10px; align-content: center;">비밀번호 수정</button>
+						</td>
+					</tr> 
+					
+				</table>
+			</form>
 		</div>
+		
+		<div th:if="${userPw == null}">입력한 정보가 틀렸습니다. 다시 확인해주세요.
+		 <br>
+		 <a href="findPw" style="">돌아가기</a>
+		</div>
+		<a href="/" style="color: blue;">홈</a>
 	</div>
-</div>
-
-
-
 </body>
 </html>

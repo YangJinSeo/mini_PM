@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>findPw 비밀번호 찾기</title>
 <style type="text/css">
 
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
@@ -258,116 +258,38 @@ footer a {
 }
 
 </style>
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.1.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.js"></script>
-<script type="text/javascript">
-
-$(function(){
-	$("#regist").click(function(){
-		$("#frm").ajaxSubmit({  //CSR
-			type: "POST",
-			url: "userRegist",
-			beforeSubmit : function(){
-				if($("#userId").val() == ""){
-					alert("아이디를 입력해주세요.");
-					$("#userId").focus();
-					return false;					
-				}
-				if($("#userPw").val() == ""){
-					alert("비밀번호를 입력해주세요.");
-					$("#userPw").focus();
-					return false;
-				}
-				if($("#userPwCon").val() != $("#userPw").val()){
-					alert("비밀번호를 확인해주세요.");
-					$("#userPwCon").focus();
-					return false;
-				}
-				if($("#userName").val() == ""){
-					alert("이름을 입력해주세요.");
-					$("#userName").focus();
-					return false;
-				}
-				if($("#pmEmpNum").val() == ""){
-					alert("직원번호를 입력해주세요.");
-					$("#pmEmpNum").focus();
-					return false;
-				}
-			},
-			success: function (result) {
-			    if (result === 1) {
-			        alert("회원가입 성공. 로그인을 하십시오.");
-			        location.href = "/";
-			    } else {
-			        alert("인사 직원이 아니면 이용할 수 없습니댜.");
-			        location.href = "/";
-			    }
-			},
-			error : function(){
-				alert("서버오류");
-				location.href="/";
-			}
-		});
-	});
-});
-
-
-</script>
 
 </head>
 <body>
-<h2>PM 인사 관리 시스템</h2>
+<h2>비밀번호 찾기</h2>
 <div class="container" id="container">
-    <form action="userRegist" method="post" id="frm">
+    <form action="findPw" method="post">
     <table style="width: 100%;">
-      <caption>직원 인증</caption>
+      
       <tr>
       	<td>직원번호</td>
       	<td>
-      		<input type="text" name="pmEmpNum" id="pmEmpNum" style="width: 100%">
-      	</td>
-      </tr>
-      
-      <tr>
-      	<td>이름</td>
-      	<td>
-      		<input type="text" name="userName" id="userName" style="width:100%;">
-      	</td>
-      </tr>
-      
-      <tr>
-      	<td>주민번호</td>
-      	<td>
-      		<input type="text" name="userJumin" id="userJumin" style="width:100%;">
+      		<input type="text" name="empNum" style="width: 80%">
       	</td>
       </tr>
       
       <tr>
       	<td>아이디</td>
       	<td>
-      		<input type="text" name="userId" id="userId" style="width:100%;">
-      		 <span id="idCheck"></span>
+      		<input type="text" name="userId" style="width:80%;">
       	</td>
       </tr>
       
       <tr>
-      	<td>비밀번호</td>
+      	<td>주민번호</td>
       	<td>
-      		<input type="password" name="userPw" id="userPw" style="width:100%;">
+      		<input type="text" name="userJumin" id="userJumin" style="width:80%;">
       	</td>
       </tr>
-      
-      <tr>
-      	<td>비밀번호 확인</td>
-      	<td>
-      		<input type="password" name="userPwCon" id="userPwCon" style="width:100%;">
-      	</td>
-      	</tr>
-      
       
     </table>
-        <button class="w3-button w3-dark-grey" type="button" id="regist" style="margin-top: 10px;">회원가입</button>
+        <button class="w3-button w3-dark-grey" type="submit" 
+         style="margin-top: 10px;">회원 정보 확인</button>
     </form>
     <br>
 </div>

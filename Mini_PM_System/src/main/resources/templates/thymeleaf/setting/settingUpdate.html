@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>empList</title>
+<title>설정 / 내 정보 수정</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -17,7 +17,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 <!-- Top container -->
 <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <span class="w3-bar-item w3-right"><a href="../login/logout">로그아웃</a></span> <!-- 링크 설정-->
+  <span class="w3-bar-item w3-right"><a href="../../login/logout">로그아웃</a></span> <!-- 링크 설정-->
 </div>
 
 <!-- Sidebar/menu -->
@@ -59,18 +59,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
 
   <div class="w3-row-padding w3-margin-bottom">
   
-  	<a href="empList">
-    <div class="w3-quarter">
-      <div class="w3-container w3-red w3-padding-16">
-        <div class="w3-left"><i class="fa fa-list-ul w3-xxxlarge"></i></div>
-        <div class="w3-right"></div>
-        <div class="w3-clear"></div>
-        <h4>직원목록</h4>
-      </div>
-    </div>
-    </a>
-    
-    <a href="empWrite">
+    <a href="settingUpdate">
     <div class="w3-quarter">
       <div class="w3-container w3-blue w3-padding-16">
         <div class="w3-left"><i class="fa fa-pencil-square-o w3-xxxlarge"></i></div>
@@ -78,74 +67,84 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
           
         </div>
         <div class="w3-clear"></div>
-        <h4>직원등록</h4>
+        <h4>내 정보 수정</h4>
       </div>
     </div>
     </a>
     
+    <a href="userPwUpdate">
     <div class="w3-quarter">
+      <div class="w3-container w3-red w3-padding-16">
+        <div class="w3-left"><i class="fa fa-list-ul w3-xxxlarge"></i></div>
+        <div class="w3-right"></div>
+        <div class="w3-clear"></div>
+        <h4>비밀번호 수정</h4>
+      </div>
+    </div>
+    </a>
+    
+    <a href="adminList">
+    <div class="w3-quarter" th:if="${dto.userApproval == 'H'}">
       <div class="w3-container w3-orange w3-text-white w3-padding-16">
         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>직원 숫자</h3>
-        </div>
+        <div class="w3-right"></div>
         <div class="w3-clear"></div>
-        <h4>직원 수</h4>
+        <h4>관리자 관리</h4>
       </div>
     </div>
   </div>
+  </a>
   
   <hr>
 
-  <div class="w3-container">
-    <h5>직원목록</h5>
-    <table class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-    <form action="empList" method="get">
-		<tr>
-			<td colspan=5>직원검색 : 
-				<input type="search" name="searchWord" size=60 th:value="${searchWord}"/>
-				<input type="submit" value="검색" />
-			</td>
-		</tr>
-	</form>
-      
-      <tr>
-        <td>직원번호</td>
-        <td>이름</td>
-        <td>부서코드</td>
-        <td>직무코드</td>
-        <td>입사일</td>
-      </tr>
-      
-      <tr th:each="empCommand, idx : ${list}">
-        <td><a th:href="|empDetail/${empCommand.empNum}|">[[${empCommand.empNum}]]</a></td>
-        <td><a th:href="|empDetail/${empCommand.empNum}|">[[${empCommand.empName}]]</a></td>
-        <td>[[${empCommand.departmentId}]]</td>
-        <td>[[${empCommand.jobId}]]</td>
-        <td>[[${#dates.format(empCommand.empHireDate, 'yyyy-MM-dd')}]]</td>
-      </tr>
-      
-     <tr>
-		<th colspan="5" style="text-align: center;">
-			<span th:if="${page <= 1}">[이전]</span>
-			<span th:if="${page > 1}">
-			<a th:href="|empList?page=${page - 1}&searchWord=${searchWord}|">[이전]</a>
-			</span>
-			<th:block th:each="i : ${#numbers.sequence(startPageNum, endPageNum)}">
-				[<a th:href="|empList?page=${i}&searchWord=${searchWord}|">[[${i}]]</a>]
-			</th:block>
-			<span th:if="${page < maxPage}">
-			<a th:href="@{empList?(page=${page + 1},searchWord=${searchWord})}">[다음]</a>
-			</span>
-			<span th:if="${page >= maxPage}">
-			[다음]
-			</span>			
-		</th>
-	 </tr>
-     
-    </table><br>
+  
+  <div class="w3-panel">
+    <div class="w3-row-padding" style="margin:0 -16px, width: 100%; max-width: 800px" >
+      <div class="w3-third">
+        
+      </div>
+
+      <div class="w3-twothird">
+       <form action="settingUpdate" method="post">
+       	<input type="hidden" name="empNum" th:value="${dto.pmEmpNum}">
+        <table class="w3-table w3-striped w3-white">
+        	<caption>내 정보 수정</caption>
+	        <tr>
+	            <td>사원 번호</td>
+	            <td>[[${dto.pmEmpNum}]]</td>
+	        </tr>
+	        
+	        <tr>
+            <td>아이디</td>
+            <td>[[${dto.userId}]]</td>
+	        </tr>
+	    
+	        <tr>
+            <td>관리자 권한</td>
+            <td>
+            	<div th:if="${dto.userApproval == 'y'}">일반 관리자</div>
+            	<div th:if="${dto.userApproval == 'H'}">총 관리자</div>
+            </td>
+	        </tr>
+	        
+	        <tr>
+	            <td>PM 시스템 등록일</td>
+	            <td>[[${#dates.format(dto.registDate, 'yyyy-MM-dd')}]]</td>
+	        </tr>
+	        
+	        <tr>
+	        	<td>이름 : </td>
+	        	<td>
+	        		<input type="text" name="userName" th:value="${dto.userName}">
+	        	</td>
+	        </tr>
+        </table>
+        	<button class="w3-button w3-dark-grey" 
+        			type="submit" style="margin-top: 10px;">내 정보 수정</button>
+        </form>
+      </div>
+    </div>
   </div>
-  <hr>
   
   
   <br>

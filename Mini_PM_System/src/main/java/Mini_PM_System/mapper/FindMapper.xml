@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.FindMapper">
+	<select id="findId" resultType="string">
+		select USER_ID from users
+		where PM_EMP_NUM = #{empNum}
+			and USER_NAME = #{userName}			
+	</select>
+	
+	<select id="findPw" resultType="string">
+		select USER_PW from users
+		where PM_EMP_NUM = #{empNum}
+			and USER_ID = #{userId}
+			and 'yes' = (select 'yes' from employees
+						where EMP_JUMIN = #{userJumin}) 
+	</select>
+	
+	<update id="chagePw">
+		update users
+		set user_pw = #{encodeNewPw}
+		where user_id = #{userId}
+	</update>
+	
+	<!-- ///////// 셋팅의 내 정보 수정 ////////////  -->
+	<update id="userUpdate">
+		update users
+		set user_name = #{userName}
+		where PM_EMP_NUM = #{empNum}
+	</update>
+	
+	<sql id="userCols">
+		USER_ID, USER_PW, USER_NAME
+		, USER_APPROVAL, PM_EMP_NUM, REGIST_DATE
+	</sql>
+	
+	<select id="userOne" resultType="auth">
+		select USER_ID, USER_PW, USER_NAME
+			, USER_APPROVAL, PM_EMP_NUM, REGIST_DATE
+		from users
+		where PM_EMP_NUM = #{empNum}
+	</select>
+	
+	<select id="adminList" resultType="auth">
+		select <include refid="userCols"/> from users
+		where USER_APPROVAL in ('y', 'H')
+	</select>
+	
+	<select id="unauthList" resultType="auth">
+		select <include refid="userCols"/> from users
+		where USER_APPROVAL is null
+	</select>
+	
+	<select id="adminInfo" resultType="auth">
+		select <include refid="userCols"/> from users
+		where user_id = #{id}
+	</select>
+	
+	<update id="changeY">
+		update users
+		set USER_APPROVAL = 'y'
+		where USER_ID = #{userId}
+		and USER_APPROVAL is null
+	</update>
+	
+	<update id="changeH">
+		update users
+		set USER_APPROVAL = 'H'
+		where USER_ID = #{userId}
+		and USER_APPROVAL = 'y'
+	</update>
+	
+	<delete id="adminDelete">
+		delete from users
+		where user_id = #{id}	
+	</delete>
+	
+</mapper>
