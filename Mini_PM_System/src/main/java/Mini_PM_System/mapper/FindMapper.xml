@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC 	
+	"-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mini_PM_System.mapper.FindMapper">
+	<select id="findId" resultType="string">
+		select USER_ID from users
+		where PM_EMP_NUM = #{empNum}
+			and USER_NAME = #{userName}			
+	</select>
+	
+	<select id="findPw" resultType="string">
+		select USER_PW from users
+		where PM_EMP_NUM = #{empNum}
+			and USER_NAME = #{userName}
+			and 'yes' = (select 'yes' from employees
+						where EMP_JUMIN = #{userJumin}) 
+	</select>
+</mapper>
