@@ -1,5 +1,7 @@
 package Mini_PM_System.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,5 +24,17 @@ public interface FindMapper {
 						,@Param("empNum") String empNum);
 
 	public AuthInfoDTO userOne(String empNum);
+
+	public List<AuthInfoDTO> adminList();
+
+	public List<AuthInfoDTO> unauthList();
+
+	public AuthInfoDTO adminInfo(String id);
+
+	public Integer changeY(String userId);
+
+	public Integer changeH(String userId);
+
+	public void adminDelete(String id);
 
 }

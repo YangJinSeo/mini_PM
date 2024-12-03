@@ -30,11 +30,50 @@
 		where PM_EMP_NUM = #{empNum}
 	</update>
 	
+	<sql id="userCols">
+		USER_ID, USER_PW, USER_NAME
+		, USER_APPROVAL, PM_EMP_NUM, REGIST_DATE
+	</sql>
+	
 	<select id="userOne" resultType="auth">
 		select USER_ID, USER_PW, USER_NAME
 			, USER_APPROVAL, PM_EMP_NUM, REGIST_DATE
 		from users
 		where PM_EMP_NUM = #{empNum}
 	</select>
+	
+	<select id="adminList" resultType="auth">
+		select <include refid="userCols"/> from users
+		where USER_APPROVAL in ('y', 'H')
+	</select>
+	
+	<select id="unauthList" resultType="auth">
+		select <include refid="userCols"/> from users
+		where USER_APPROVAL is null
+	</select>
+	
+	<select id="adminInfo" resultType="auth">
+		select <include refid="userCols"/> from users
+		where user_id = #{id}
+	</select>
+	
+	<update id="changeY">
+		update users
+		set USER_APPROVAL = 'y'
+		where USER_ID = #{userId}
+		and USER_APPROVAL is null
+	</update>
+	
+	<update id="changeH">
+		update users
+		set USER_APPROVAL = 'H'
+		where USER_ID = #{userId}
+		and USER_APPROVAL = 'y'
+	</update>
+	
+	<delete id="adminDelete">
+		delete from users
+		where user_id = #{id}	
+	</delete>
 	
 </mapper>
