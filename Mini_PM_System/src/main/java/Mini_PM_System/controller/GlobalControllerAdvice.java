@@ -17,4 +17,5 @@ public class GlobalControllerAdvice {
 		return auth != null ? auth.getUserName() : null;
 	}
 
+
 }

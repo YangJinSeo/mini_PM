@@ -12,8 +12,29 @@
 	<select id="findPw" resultType="string">
 		select USER_PW from users
 		where PM_EMP_NUM = #{empNum}
-			and USER_NAME = #{userName}
+			and USER_ID = #{userId}
 			and 'yes' = (select 'yes' from employees
 						where EMP_JUMIN = #{userJumin}) 
 	</select>
+	
+	<update id="chagePw">
+		update users
+		set user_pw = #{encodeNewPw}
+		where user_id = #{userId}
+	</update>
+	
+	<!-- ///////// 셋팅의 내 정보 수정 ////////////  -->
+	<update id="userUpdate">
+		update users
+		set user_name = #{userName}
+		where PM_EMP_NUM = #{empNum}
+	</update>
+	
+	<select id="userOne" resultType="auth">
+		select USER_ID, USER_PW, USER_NAME
+			, USER_APPROVAL, PM_EMP_NUM, REGIST_DATE
+		from users
+		where PM_EMP_NUM = #{empNum}
+	</select>
+	
 </mapper>

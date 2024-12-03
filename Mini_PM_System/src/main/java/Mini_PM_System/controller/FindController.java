@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import Mini_PM_System.service.PwChangeService;
 import Mini_PM_System.service.find.FindIdService;
 import Mini_PM_System.service.find.FindPwService;
 
@@ -42,11 +44,20 @@ public class FindController {
 	FindPwService findPwService;
 	@PostMapping("findPw")
 	public String findPw(String empNum
-						, String userName
+						, String userId
 						, String userJumin
 						, Model model) {
-		findPwService.execute(empNum, userName, userJumin, model);
+		findPwService.execute(empNum, userId, userJumin, model);
 		return "thymeleaf/find/findPwOk";
+	}
+	
+	// 비밀번호 재설정
+	@Autowired
+	PwChangeService pwChangeService;
+	@PostMapping("findPwChange")
+	public @ResponseBody Integer findPwOk(String newPw, String userId) {
+		
+		return pwChangeService.execute(newPw, userId);
 	}
 	
 	

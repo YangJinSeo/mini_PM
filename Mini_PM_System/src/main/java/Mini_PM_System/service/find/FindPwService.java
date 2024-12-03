@@ -11,11 +11,12 @@ public class FindPwService {
 	
 	@Autowired
 	FindMapper findMapper;
-	public void execute(String empNum, String userName
+	public void execute(String empNum, String userId
 						, String userJumin, Model model) {
 		String userPw =
-				findMapper.findPw(empNum, userName, userJumin);
+				findMapper.findPw(empNum, userId, userJumin);
 		model.addAttribute("userPw", userPw);
+		model.addAttribute("userId", userId);
 	}
 
 }
